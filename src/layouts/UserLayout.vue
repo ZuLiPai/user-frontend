@@ -3,14 +3,14 @@
   <div id="userLayout" :class="['user-layout-wrapper', isMobile && 'mobile']">
     <div class="container">
       <div class="user-layout-lang">
-        <select-lang class="select-lang-trigger" />
+      <!--        <select-lang class="select-lang-trigger" />-->
       </div>
       <div class="user-layout-content">
         <div class="top">
           <div class="header">
             <a href="/">
               <img src="~@/assets/logo.svg" class="logo" alt="logo">
-              <span class="title">Ant Design</span>
+              <span class="title"> {{ title }}</span>
             </a>
           </div>
           <div class="desc">
@@ -27,7 +27,7 @@
             <a href="_self">条款</a>
           </div>
           <div class="copyright">
-            Copyright &copy; 2018 vueComponent
+            Copyright &copy; {{ year }} ZuLiPai
           </div>
         </div>
       </div>
@@ -38,6 +38,7 @@
 <script>
 import { deviceMixin } from '@/store/device-mixin'
 import SelectLang from '@/components/SelectLang'
+import defaultSettings from '@/config/defaultSettings'
 
 export default {
   name: 'UserLayout',
@@ -50,6 +51,12 @@ export default {
   },
   beforeDestroy () {
     document.body.classList.remove('userLayout')
+  },
+  data () {
+    return {
+      title: defaultSettings.title,
+      year: new Date().getFullYear()
+    }
   }
 }
 </script>

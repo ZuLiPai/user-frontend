@@ -247,34 +247,39 @@ export const asyncRouterMap = [
             meta: { title: 'menu.account.center', keepAlive: true, permission: ['user'] }
           },
           {
+            path: '/account/123',
+            name: '123',
+            component: () => import('@/views/userinfo/component/PersonalInfo.vue'),
+            meta: { title: 'menu.account.center', keepAlive: true, permission: ['user'] }
+          },
+          {
             path: '/account/settings',
             name: 'settings',
-            component: () => import('@/views/account/settings/Index'),
+            component: () => import('@/views/userinfo/Index.vue'),
             meta: { title: 'menu.account.settings', hideHeader: true, permission: ['user'] },
-            redirect: '/account/settings/basic',
+            redirect: '/account/settings/info',
             hideChildrenInMenu: true,
             children: [
               {
-                path: '/account/settings/basic',
-                name: 'BasicSettings',
-                component: () => import('@/views/account/settings/BasicSetting'),
-                meta: { title: 'account.settings.menuMap.basic', hidden: true, permission: ['user'] }
+                path: '/account/settings/info',
+                name: 'PersonalInfo',
+                component: () => import('@/views/userinfo/component/PersonalInfo.vue'),
+                meta: { title: '个人信息', hidden: true, permission: ['user'] }
               },
               {
-                path: '/account/settings/security',
-                name: 'SecuritySettings',
-                component: () => import('@/views/account/settings/Security'),
+                path: '/account/settings/address',
+                name: 'Address',
+                component: () => import('@/views/userinfo/component/Address.vue'),
                 meta: {
-                  title: 'account.settings.menuMap.security',
+                  title: '我的地址',
                   hidden: true,
-                  keepAlive: true,
                   permission: ['user']
                 }
               },
               {
-                path: '/account/settings/custom',
-                name: 'CustomSettings',
-                component: () => import('@/views/account/settings/Custom'),
+                path: '/account/settings/order',
+                name: 'Order',
+                component: () => import('@/views/userinfo/component/Order.vue'),
                 meta: { title: 'account.settings.menuMap.custom', hidden: true, keepAlive: true, permission: ['user'] }
               },
               {

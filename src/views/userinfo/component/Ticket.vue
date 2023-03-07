@@ -11,7 +11,7 @@
         {{ tag.toUpperCase() }}
       </a-tag>
     </span>
-    <span slot="action" slot-scope="查看详情">
+    <span slot="action">
       <a>查看详情</a>
     </span>
   </a-table>

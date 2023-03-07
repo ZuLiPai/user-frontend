@@ -19,7 +19,7 @@ export default {
   props: {
     prefixCls: {
       type: String,
-      default: 'antd-pro-components-article-list-content-index-listContent'
+      default: 'antd-pro-components-article-list-content-mainpage-listContent'
     },
     description: {
       type: String,

@@ -2,7 +2,6 @@
 import * as loginService from '@/api/login'
 // eslint-disable-next-line
 import { BasicLayout, BlankLayout, PageView, RouteView } from '@/layouts'
-import PersonalInfo from "@/views/userinfo/component/PersonalInfo.vue";
 
 // 前端路由表 (基于动态)
 const constantRouterComponents = {
@@ -55,7 +54,9 @@ const constantRouterComponents = {
   // UserInfo
   PersonalInfo: () => import('@/views/userinfo/PersonalPage'),
   Address: () => import('@/views/userinfo/component/Address.vue'),
-  Order: () => import('@/views/userinfo/component/Order.vue')
+  Order: () => import('@/views/userinfo/component/Order.vue'),
+  Favorite: () => import('@/views/userinfo/component/Favorite.vue'),
+  Ticket: () => import('@/views/userinfo/component/Ticket.vue')
   // 'TestWork': () => import(/* webpackChunkName: "TestWork" */ '@/views/dashboard/TestWork')
 }
 

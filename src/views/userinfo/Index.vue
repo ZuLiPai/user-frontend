@@ -25,13 +25,13 @@
                 我的订单
               </router-link>
             </a-menu-item>
-            <a-menu-item key="/account/settings/binding">
-              <router-link :to="{ name: 'BindingSettings' }">
+            <a-menu-item key="/account/settings/favorite">
+              <router-link :to="{ name: 'Favorite' }">
                 我的收藏
               </router-link>
             </a-menu-item>
-            <a-menu-item key="/account/settings/notification">
-              <router-link :to="{ name: 'NotificationSettings' }">
+            <a-menu-item key="/account/settings/ticket">
+              <router-link :to="{ name: 'Ticket' }">
                 我的工单
               </router-link>
             </a-menu-item>

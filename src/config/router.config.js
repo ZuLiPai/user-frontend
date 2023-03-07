@@ -280,20 +280,20 @@ export const asyncRouterMap = [
                 path: '/account/settings/order',
                 name: 'Order',
                 component: () => import('@/views/userinfo/component/Order.vue'),
-                meta: { title: 'account.settings.menuMap.custom', hidden: true, keepAlive: true, permission: ['user'] }
+                meta: { title: '我的订单', hidden: true, keepAlive: true, permission: ['user'] }
               },
               {
-                path: '/account/settings/binding',
-                name: 'BindingSettings',
-                component: () => import('@/views/account/settings/Binding'),
-                meta: { title: 'account.settings.menuMap.binding', hidden: true, keepAlive: true, permission: ['user'] }
+                path: '/account/settings/favorite',
+                name: 'Favorite',
+                component: () => import('@/views/userinfo/component/Favorite.vue'),
+                meta: { title: '我的收藏', hidden: true, keepAlive: true, permission: ['user'] }
               },
               {
-                path: '/account/settings/notification',
-                name: 'NotificationSettings',
-                component: () => import('@/views/account/settings/Notification'),
+                path: '/account/settings/ticket',
+                name: 'Ticket',
+                component: () => import('@/views/userinfo/component/Ticket.vue'),
                 meta: {
-                  title: 'account.settings.menuMap.notification',
+                  title: '我的工单',
                   hidden: true,
                   keepAlive: true,
                   permission: ['user']

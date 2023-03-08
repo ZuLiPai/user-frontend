@@ -14,8 +14,10 @@
     -->
     <template v-slot:menuHeaderRender>
       <div>
-        <img src="@/assets/logo.svg" />
-        <h1>{{ title }}</h1>
+        <a href="/">
+          <img src="@/assets/logo.svg" />
+          <h1>{{ title }}</h1>
+        </a>
       </div>
     </template>
     <!-- 1.0.0+ 版本 pro-layout 提供 API,

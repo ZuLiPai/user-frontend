@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import Step1 from '@/views/transaction/createSteps/Step1.vue'
-import Step2 from '@/views/transaction/createSteps/Step2.vue'
-import Step3 from '@/views/transaction/createSteps/Step3.vue'
+import Step1 from '@/views/order/createSteps/Step1.vue'
+import Step2 from '@/views/order/createSteps/Step2.vue'
+import Step3 from '@/views/order/createSteps/Step3.vue'
 
 export default {
   name: 'CreateTransaction',

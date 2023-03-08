@@ -52,7 +52,7 @@ const constantRouterComponents = {
   BindingSettings: () => import('@/views/account/settings/Binding'),
   NotificationSettings: () => import('@/views/account/settings/Notification'),
   // UserInfo
-  PersonalInfo: () => import('@/views/userinfo/PersonalPage'),
+  PersonalInfo: () => import('@/views/userinfo/index.vue'),
   Address: () => import('@/views/userinfo/component/Address.vue'),
   Order: () => import('@/views/userinfo/component/Order.vue'),
   Favorite: () => import('@/views/userinfo/component/Favorite.vue'),

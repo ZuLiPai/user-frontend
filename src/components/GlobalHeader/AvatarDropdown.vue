@@ -8,11 +8,19 @@
       <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
         <a-menu-item v-if="menu" key="center" @click="handleToCenter">
           <a-icon type="user" />
-          {{ $t('menu.account.center') }}
+          个人中心
+        </a-menu-item>
+        <a-menu-item v-if="menu" key="settings" @click="handleToFavorite">
+          <a-icon type="heart" />
+          我的收藏
+        </a-menu-item>
+        <a-menu-item v-if="menu" key="settings" @click="handleToTransaction">
+          <a-icon type="transaction" />
+          我的订单
         </a-menu-item>
         <a-menu-item v-if="menu" key="settings" @click="handleToSettings">
-          <a-icon type="setting" />
-          {{ $t('menu.account.settings') }}
+          <a-icon type="question-circle" />
+          帮助
         </a-menu-item>
         <a-menu-divider v-if="menu" />
         <a-menu-item key="logout" @click="handleLogout">
@@ -44,10 +52,16 @@ export default {
   },
   methods: {
     handleToCenter () {
-      this.$router.push({ path: '/account/center' })
+      this.$router.push({ path: '/account/settings' })
     },
     handleToSettings () {
       this.$router.push({ path: '/account/settings' })
+    },
+    handleToFavorite () {
+      this.$router.push({ path: '/account/settings/favorite' })
+    },
+    handleToTransaction () {
+      this.$router.push({ path: '/account/settings/order' })
     },
     handleLogout (e) {
       Modal.confirm({

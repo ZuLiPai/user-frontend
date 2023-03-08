@@ -56,20 +56,14 @@ export const asyncRouterMap = [
       // },
       // forms,
       {
-        path: '',
+        path: '/1',
         component: RouteView,
         meta: { title: '小熊写的' },
         children: [
           {
-            path: '/index',
-            name: 'mainpage',
-            component: () => import('@/views/mainpage'),
-            meta: { title: '首页', keepAlive: true, permission: ['dashboard'] } // TODO:权限管理
-          },
-          {
-            path: '/transaction/create',
-            name: 'CreateTransaction',
-            component: () => import('@/views/transaction/CreateTransaction'),
+            path: '/order/create',
+            name: 'CreateOrder',
+            component: () => import('@/views/order/CreateOrder'),
             meta: { title: '创建订单', keepAlive: true, permission: ['form'] }
           }
         ]
@@ -236,68 +230,48 @@ export const asyncRouterMap = [
       {
         path: '/account',
         component: RouteView,
-        redirect: '/account/center',
+        redirect: '/account/info',
         name: 'account',
         meta: { title: 'menu.account', icon: 'user', keepAlive: true, permission: ['user'] },
+        hideChildrenInMenu: true,
         children: [
           {
             path: '/account/center',
             name: 'center',
-            component: () => import('@/views/account/center'),
-            meta: { title: 'menu.account.center', keepAlive: true, permission: ['user'] }
-          },
-          {
-            path: '/account/123',
-            name: '123',
-            component: () => import('@/views/userinfo/component/PersonalInfo.vue'),
-            meta: { title: 'menu.account.center', keepAlive: true, permission: ['user'] }
-          },
-          {
-            path: '/account/settings',
-            name: 'settings',
-            component: () => import('@/views/userinfo/Index.vue'),
-            meta: { title: 'menu.account.settings', hideHeader: true, permission: ['user'] },
-            redirect: '/account/settings/info',
+            component: () => import('@/views/userinfo/'),
             hideChildrenInMenu: true,
+            hidden: true,
+            meta: { title: 'menu.account.center', keepAlive: true, permission: ['user'] },
             children: [
               {
-                path: '/account/settings/info',
+                path: '/account/info',
                 name: 'PersonalInfo',
                 component: () => import('@/views/userinfo/component/PersonalInfo.vue'),
                 meta: { title: '个人信息', hidden: true, permission: ['user'] }
               },
               {
-                path: '/account/settings/address',
+                path: '/account/address',
                 name: 'Address',
                 component: () => import('@/views/userinfo/component/Address.vue'),
-                meta: {
-                  title: '我的地址',
-                  hidden: true,
-                  permission: ['user']
-                }
+                meta: { title: '我的地址', hidden: true, permission: ['user'] }
               },
               {
-                path: '/account/settings/order',
+                path: '/account/order',
                 name: 'Order',
                 component: () => import('@/views/userinfo/component/Order.vue'),
                 meta: { title: '我的订单', hidden: true, keepAlive: true, permission: ['user'] }
               },
               {
-                path: '/account/settings/favorite',
+                path: '/account/favorite',
                 name: 'Favorite',
                 component: () => import('@/views/userinfo/component/Favorite.vue'),
                 meta: { title: '我的收藏', hidden: true, keepAlive: true, permission: ['user'] }
               },
               {
-                path: '/account/settings/ticket',
+                path: '/account/ticket',
                 name: 'Ticket',
                 component: () => import('@/views/userinfo/component/Ticket.vue'),
-                meta: {
-                  title: '我的工单',
-                  hidden: true,
-                  keepAlive: true,
-                  permission: ['user']
-                }
+                meta: { title: '我的工单', hidden: true, keepAlive: true, permission: ['user'] }
               }
             ]
           }

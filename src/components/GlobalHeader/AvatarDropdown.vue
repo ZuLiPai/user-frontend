@@ -18,7 +18,7 @@
           <a-icon type="transaction" />
           我的订单
         </a-menu-item>
-        <a-menu-item v-if="menu" key="settings" @click="handleToSettings">
+        <a-menu-item v-if="menu" key="settings" @click="handleToHelp">
           <a-icon type="question-circle" />
           帮助
         </a-menu-item>
@@ -52,16 +52,16 @@ export default {
   },
   methods: {
     handleToCenter () {
-      this.$router.push({ path: '/account/settings' })
+      this.$router.push({ name: 'PersonalInfo' })
     },
-    handleToSettings () {
-      this.$router.push({ path: '/account/settings' })
+    handleToHelp () {
+      this.$router.push({ name: 'help' })
     },
     handleToFavorite () {
-      this.$router.push({ path: '/account/settings/favorite' })
+      this.$router.push({ name: 'Favorite' })
     },
     handleToTransaction () {
-      this.$router.push({ path: '/account/settings/order' })
+      this.$router.push({ name: 'Order' })
     },
     handleLogout (e) {
       Modal.confirm({

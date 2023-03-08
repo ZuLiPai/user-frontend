@@ -276,6 +276,13 @@ export const asyncRouterMap = [
             ]
           }
         ]
+      },
+      {
+        name: 'help',
+        path: '/help',
+        component: () => import('@/views/userinfo/HelpPage'),
+        meta: { title: '帮助' },
+        hidden: true
       }
 
       // other

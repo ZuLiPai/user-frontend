@@ -10,27 +10,27 @@
             type="inner"
             @openChange="onOpenChange"
           >
-            <a-menu-item key="/account/settings/info">
+            <a-menu-item key="/account/info">
               <router-link :to="{ name: 'PersonalInfo'}">
                 个人信息
               </router-link>
             </a-menu-item>
-            <a-menu-item key="/account/settings/address">
+            <a-menu-item key="/account/address">
               <router-link :to="{ name: 'Address' }">
                 我的地址
               </router-link>
             </a-menu-item>
-            <a-menu-item key="/account/settings/order">
+            <a-menu-item key="/account/order">
               <router-link :to="{ name: 'Order' }">
                 我的订单
               </router-link>
             </a-menu-item>
-            <a-menu-item key="/account/settings/favorite">
+            <a-menu-item key="/account/favorite">
               <router-link :to="{ name: 'Favorite' }">
                 我的收藏
               </router-link>
             </a-menu-item>
-            <a-menu-item key="/account/settings/ticket">
+            <a-menu-item key="/account/ticket">
               <router-link :to="{ name: 'Ticket' }">
                 我的工单
               </router-link>

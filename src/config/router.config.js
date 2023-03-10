@@ -293,6 +293,18 @@ export const asyncRouterMap = [
         ]
       },
       {
+        name: 'ticket',
+        path: '/ticket',
+        component: () => import('@/views/ticket'),
+        meta: { title: '工单' }
+      },
+      {
+        path: '/createticket',
+        name: 'CreateTicket',
+        component: () => import('@/views/ticket/CreateTicket'),
+        meta: { title: '创建工单', hidden: true, permission: ['user'] }
+      },
+      {
         name: 'help',
         path: '/help',
         component: () => import('@/views/userinfo/HelpPage'),

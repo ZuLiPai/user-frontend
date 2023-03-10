@@ -2,6 +2,7 @@
 import * as loginService from '@/api/login'
 // eslint-disable-next-line
 import { BasicLayout, BlankLayout, PageView, RouteView } from '@/layouts'
+import CreateTicket from '@/views/ticket/CreateTicket'
 
 // 前端路由表 (基于动态)
 const constantRouterComponents = {
@@ -57,7 +58,8 @@ const constantRouterComponents = {
   Order: () => import('@/views/userinfo/component/Order.vue'),
   Favorite: () => import('@/views/userinfo/component/Favorite.vue'),
   Ticket: () => import('@/views/userinfo/component/Ticket.vue'),
-  OrderDetail: () => import('@/views/order/OrderDetail.vue')
+  OrderDetail: () => import('@/views/order/OrderDetail.vue'),
+  CreateTicket: () => import('@/views/ticket/CreateTicket.vue')
   // 'TestWork': () => import(/* webpackChunkName: "TestWork" */ '@/views/dashboard/TestWork')
 }
 

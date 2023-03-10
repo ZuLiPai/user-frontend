@@ -13,6 +13,8 @@
     </span>
     <span slot="action">
       <a>查看详情</a>
+      <a-divider type="vertical"/>
+      <a>关闭工单</a>
     </span>
   </a-table>
 </template>

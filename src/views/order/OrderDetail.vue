@@ -16,20 +16,11 @@
         <a-descriptions-item label="支付方式">支付宝</a-descriptions-item>
         <a-descriptions-item label="押金金额">18000元</a-descriptions-item>
         <a-descriptions-item label="租金金额">200元</a-descriptions-item>
-        <a-popconfirm
-          title="Are you sure delete this task?"
-          ok-text="Yes"
-          cancel-text="No"
-          @confirm="confirm"
-          @cancel="cancel"
-        >
-          <a href="#">Delete</a>
-        </a-popconfirm>
-      </a-descriptions></template>
+      </a-descriptions>
+    </template>
     <template>
-
-      <a-row justify="center">
-        <a-col offset="3" :span="6">
+      <a-row style="max-width: 90%; margin: 0 auto">
+        <a-col :span="8">
           <a-card class="cardstyle">
             <a-steps progress-dot="true" :current="3" direction="vertical">
               <a-popover slot="progressDot" slot-scope="{ index, status, prefixCls }">
@@ -47,7 +38,7 @@
             </a-steps>
           </a-card>
         </a-col>
-        <a-col :span="12">
+        <a-col :span="16">
           <a-card class="cardstyle" title="注意事项">
             <h3>取消订单</h3>
             <p>
@@ -103,7 +94,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 .detail-layout {
   margin-left: 44px;
 }

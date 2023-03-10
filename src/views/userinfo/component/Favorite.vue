@@ -1,19 +1,19 @@
 <template>
   <a-row>
-    <a-col :span="8">
-      <ItemCard></ItemCard>
+    <a-col :sm="24" :md="8">
+      <ItemCard/>
     </a-col>
-    <a-col :span="8">
-      <ItemCard></ItemCard>
+    <a-col :sm="24" :md="8">
+      <ItemCard/>
     </a-col>
-    <a-col :span="8">
-      <ItemCard></ItemCard>
+    <a-col :sm="24" :md="8">
+      <ItemCard/>
     </a-col>
-    <a-col :span="8">
-      <ItemCard></ItemCard>
+    <a-col :sm="24" :md="8">
+      <ItemCard/>
     </a-col>
-    <a-col :span="8">
-      <ItemCard></ItemCard>
+    <a-col :sm="24" :md="8">
+      <ItemCard/>
     </a-col>
   </a-row>
 </template>

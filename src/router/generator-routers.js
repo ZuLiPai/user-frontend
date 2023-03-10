@@ -56,7 +56,8 @@ const constantRouterComponents = {
   Address: () => import('@/views/userinfo/component/Address.vue'),
   Order: () => import('@/views/userinfo/component/Order.vue'),
   Favorite: () => import('@/views/userinfo/component/Favorite.vue'),
-  Ticket: () => import('@/views/userinfo/component/Ticket.vue')
+  Ticket: () => import('@/views/userinfo/component/Ticket.vue'),
+  OrderDetail: () => import('@/views/order/OrderDetail.vue')
   // 'TestWork': () => import(/* webpackChunkName: "TestWork" */ '@/views/dashboard/TestWork')
 }
 

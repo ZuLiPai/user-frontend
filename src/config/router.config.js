@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { UserLayout, BasicLayout, BlankLayout } from '@/layouts'
+import {UserLayout, BasicLayout, BlankLayout} from '@/layouts'
 // import { bxAnaalyse } from '@/core/icons'
 
 const RouteView = {
@@ -170,6 +170,12 @@ export const asyncRouterMap = [
             name: 'ProfileAdvanced',
             component: () => import('@/views/profile/advanced/Advanced'),
             meta: { title: 'menu.profile.advanced', permission: ['profile'] }
+          },
+          {
+            path: '/profile/detail',
+            name: 'OrderDetail',
+            component: () => import('@/views/order/OrderDetail.vue'),
+            meta: { title: '订单详情', hidden: true, permission: ['user'] }
           }
         ]
       },

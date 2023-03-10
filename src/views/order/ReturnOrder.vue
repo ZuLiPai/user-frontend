@@ -1,8 +1,10 @@
 <template>
   <div>
-    <a-row>
-      <a-col offset="3" :span="18">
+    <a-row style="max-width: 80%; margin: 0 auto">
+      <a-col :span="24">
         <a-card title="归还商品">
+          <p><strong>待归还商品：佳能 Canon EOS 5D Mark IV</strong></p>
+          <a-divider></a-divider>
           <p><strong>收件人：库克</strong></p>
           <p><strong>电话：13800138000</strong></p>
           <p><strong>寄回地址：北京市朝阳区平乐园100号北京工业大学租立拍相机租赁</strong></p>

@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <a-card hoverable style="width: 240px">
+  <div class="item-card">
+    <a-card hoverable style="max-width: 280px; margin: 0 auto;">
       <template #cover>
-        <img alt="example" src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
+        <img alt="example" src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" width="100" />
       </template>
       <a-card-meta title="索尼 Sony a7m3">
         <template #description>
@@ -25,7 +25,7 @@ export default {
 p {
   margin-top: 15px;
 }
-.ant-card {
+.ant-card .item-card {
   margin-bottom: 20px;
 }
 </style>

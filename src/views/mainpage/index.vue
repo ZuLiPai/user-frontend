@@ -6,46 +6,48 @@
     <BulletinBoard style="margin-bottom: 20px"/>
     <a-card title="正在促销">
       <a-row :gutter="16">
-        <a-col offset="3" :span="6">
+        <a-col :span="8">
           <ItemCard/>
         </a-col>
-        <a-col :span="6">
+        <a-col :span="8">
           <ItemCard/>
         </a-col>
-        <a-col :span="6">
+        <a-col :span="8">
           <ItemCard/>
         </a-col>
       </a-row>
     </a-card>
     <a-card>
       <a-row :gutter="16">
-        <a-col offset="2" :span="5">
-          <ItemCard></ItemCard>
+        <a-col :xs="24" :sm="12" :md="8" :lg="6">
+          <ItemCard/>
         </a-col>
-        <a-col :span="5">
-          <ItemCard></ItemCard>
+        <a-col :xs="24" :sm="12" :md="8" :lg="6">
+          <ItemCard/>
         </a-col>
-        <a-col :span="5">
-          <ItemCard></ItemCard>
+        <a-col :xs="24" :sm="12" :md="8" :lg="6">
+          <ItemCard/>
         </a-col>
-        <a-col :span="5">
-          <ItemCard></ItemCard>
+        <a-col :xs="24" :sm="12" :md="8" :lg="6">
+          <ItemCard/>
         </a-col>
-      </a-row>
-      <a-row :gutter="16">
-        <a-col offset="2" :span="5">
-          <ItemCard></ItemCard>
+        <a-col :xs="24" :sm="12" :md="8" :lg="6">
+          <ItemCard/>
         </a-col>
-        <a-col :span="5">
-          <ItemCard></ItemCard>
+        <a-col :xs="24" :sm="12" :md="8" :lg="6">
+          <ItemCard/>
+        </a-col>
+        <a-col :xs="24" :sm="12" :md="8" :lg="6">
+          <ItemCard/>
+        </a-col>
+        <a-col :xs="24" :sm="12" :md="8" :lg="6">
+          <ItemCard/>
         </a-col>
       </a-row>
     </a-card>
-    <a-row>
-      <a-col>
-        <a-button>查看更多</a-button>
-      </a-col>
-    </a-row>
+    <div class="see-more">
+      <a-button>查看更多</a-button>
+    </div>
   </div>
 </template>
 
@@ -70,5 +72,11 @@ export default {
 .ant-pro-page-header-search {
   text-align: center;
   margin-bottom: 16px;
+}
+
+.see-more {
+  text-align: center;
+  margin-bottom: 16px;
+  margin-top: 20px;
 }
 </style>

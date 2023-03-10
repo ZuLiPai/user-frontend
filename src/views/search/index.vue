@@ -2,11 +2,7 @@
   <div>
     <a-card :bordered="false" class="ant-pro-components-tag-select">
       <div class="ant-pro-page-header-search">
-        <a-input-search size="large" enter-button="Search" style="width: 80%; max-width: 522px;">
-          <template>
-            搜索
-          </template>
-        </a-input-search>
+        <a-input-search size="large" enter-button="搜索" style="width: 80%; max-width: 522px;"/>
       </div>
       <a-form :form="form" layout="inline">
         <standard-form-row title="标签：" block style="padding-bottom: 11px;">

@@ -1,12 +1,8 @@
 <template>
   <div>
-    <a-input-search
-      placeholder="input search text"
-      enter-button="Search"
-      size="large"
-      @search="onSearch"
-      style="margin-bottom: 20px"
-    />
+    <div class="ant-pro-page-header-search">
+      <a-input-search size="large" enter-button="搜索" style="width: 80%; max-width: 522px;"/>
+    </div>
     <BulletinBoard style="margin-bottom: 20px"/>
     <a-card title="正在促销">
       <a-row>
@@ -69,5 +65,8 @@ export default {
 </script>
 
 <style scoped>
-
+.ant-pro-page-header-search {
+  text-align: center;
+  margin-bottom: 16px;
+}
 </style>

@@ -186,6 +186,7 @@ export const asyncRouterMap = [
         name: 'result',
         component: RouteView,
         redirect: '/result/success',
+        hidden: true,
         meta: { title: 'menu.result', icon: 'check-circle-o', permission: ['result'] },
         children: [
           {
@@ -209,6 +210,7 @@ export const asyncRouterMap = [
         name: 'exception',
         component: RouteView,
         redirect: '/exception/403',
+        hidden: true,
         meta: { title: 'menu.exception', icon: 'warning', permission: ['exception'] },
         children: [
           {
@@ -295,6 +297,21 @@ export const asyncRouterMap = [
         path: '/search',
         component: () => import('@/views/search'),
         meta: { title: '搜索' }
+      },
+      {
+        name: 'comment',
+        path: '/comment',
+        component: RouteView,
+        redirect: '/comment/add',
+        meta: { title: '评论' },
+        children: [
+          {
+            name: 'addComment',
+            path: '/comment/add',
+            component: () => import('@/views/comment/AddComment.vue'),
+            meta: { title: '添加评论' }
+          }
+        ]
       }
 
       // other

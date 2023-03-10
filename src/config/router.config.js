@@ -242,7 +242,7 @@ export const asyncRouterMap = [
         hideChildrenInMenu: true,
         children: [
           {
-            path: '/account/center',
+            path: '/account',
             name: 'center',
             component: () => import('@/views/userinfo/'),
             hideChildrenInMenu: true,
@@ -289,6 +289,12 @@ export const asyncRouterMap = [
         component: () => import('@/views/userinfo/HelpPage'),
         meta: { title: '帮助' },
         hidden: true
+      },
+      {
+        name: 'search',
+        path: '/search',
+        component: () => import('@/views/search'),
+        meta: { title: '搜索' }
       }
 
       // other

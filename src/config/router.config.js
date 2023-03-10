@@ -150,7 +150,14 @@ export const asyncRouterMap = [
           }
         ]
       },
-
+      {
+        path: '/return',
+        name: 'ReturnOrder',
+        component: () => import('@/views/order/ReturnOrder.vue'),
+        meta: {
+          title: '归还商品'
+        }
+      },
       // profile
       {
         path: '/profile',

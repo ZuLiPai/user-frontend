@@ -5,36 +5,38 @@
     </div>
     <BulletinBoard style="margin-bottom: 20px"/>
     <a-card title="正在促销">
-      <a-row>
-        <a-col :span="8">
+      <a-row :gutter="16">
+        <a-col offset="3" :span="6">
           <ItemCard/>
         </a-col>
-        <a-col :span="8">
+        <a-col :span="6">
           <ItemCard/>
         </a-col>
-        <a-col :span="8">
+        <a-col :span="6">
           <ItemCard/>
         </a-col>
       </a-row>
     </a-card>
     <a-card>
       <a-row :gutter="16">
-        <a-col :span="6">
+        <a-col offset="2" :span="5">
           <ItemCard></ItemCard>
         </a-col>
-        <a-col :span="6">
+        <a-col :span="5">
           <ItemCard></ItemCard>
         </a-col>
-        <a-col :span="6">
+        <a-col :span="5">
           <ItemCard></ItemCard>
         </a-col>
-        <a-col :span="6">
+        <a-col :span="5">
           <ItemCard></ItemCard>
         </a-col>
-        <a-col :span="6">
+      </a-row>
+      <a-row :gutter="16">
+        <a-col offset="2" :span="5">
           <ItemCard></ItemCard>
         </a-col>
-        <a-col :span="6">
+        <a-col :span="5">
           <ItemCard></ItemCard>
         </a-col>
       </a-row>

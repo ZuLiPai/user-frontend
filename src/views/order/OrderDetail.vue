@@ -16,8 +16,16 @@
         <a-descriptions-item label="支付方式">支付宝</a-descriptions-item>
         <a-descriptions-item label="押金金额">18000元</a-descriptions-item>
         <a-descriptions-item label="租金金额">200元</a-descriptions-item>
-      </a-descriptions>
-    </template>
+        <a-popconfirm
+          title="Are you sure delete this task?"
+          ok-text="Yes"
+          cancel-text="No"
+          @confirm="confirm"
+          @cancel="cancel"
+        >
+          <a href="#">Delete</a>
+        </a-popconfirm>
+      </a-descriptions></template>
     <template>
 
       <a-row justify="center">
@@ -43,11 +51,19 @@
           <a-card class="cardstyle" title="注意事项">
             <h3>取消订单</h3>
             <p>
-              用户可以在每日17点发货前取消订单，并全额退还费用。如在平台发货后取消订单，将会被收取订单总额的30%作为违约金。</p>
+              用户可以在每日17点发货前 <a-popconfirm
+                title="确定要取消订单？取消后不可恢复！"
+                ok-text="Yes"
+                cancel-text="No"
+                @confirm="confirm"
+                @cancel="cancel"
+              >
+                <a href="#">取消订单</a>
+              </a-popconfirm>，并全额退还费用。如在平台发货后取消订单，将会被收取订单总额的30%作为违约金。</p>
             <h3>商品签收</h3>
             <p>为保证平台和消费者的合法权益，<a>平台协议</a>规定自商品签收即表示商品状态良好无损坏。</p>
             <h3>商品归还</h3>
-            <p>租赁到期后，请及时联系快递公司发货归还商品，并在发货后<a>在此</a>填写相关快递信息。</p>
+            <p>租赁到期后，请及时联系快递公司发货归还商品，并在发货后<a href="/return">在此</a>填写相关快递信息。</p>
             <h3>器材损坏赔偿</h3>
             <p>用户应当妥善保管租赁的器材，如发生损坏或丢失，用户应当按照租赁公司的要求进行赔偿，具体赔偿标准见<a>协议</a>。
             </p>

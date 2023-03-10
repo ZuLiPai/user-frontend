@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div>
-      <a-row>
-        <a-col span="10" offset="7">
-          <h2>工单系统</h2>
-          <h3>您遇到了问题？请<a>查看帮助</a></h3>
-          <br>
+    <a-row style="max-width: 50%; margin: 0 auto">
+      <a-col span="24">
+        <a-card>
+          <h1 style="font-size: 28px">工单系统</h1>
+          <h3>遇到了问题？请先<a>查看帮助</a></h3>
+          <a-divider/>
           <h4>新建工单：</h4>
           <a-form>
             <a-form-item
@@ -24,6 +24,7 @@
             <a-form-item>
               <a-button type="primary" html-type="submit">提交</a-button>
             </a-form-item>
+            <a-divider/>
             <h4>工单记录：</h4>
             <template>
               <a-table :columns="columns" :data-source="data">
@@ -43,11 +44,10 @@
                 </span>
               </a-table>
             </template>
-
           </a-form>
-        </a-col>
-      </a-row>
-    </div>
+        </a-card>
+      </a-col>
+    </a-row>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import {UserLayout, BasicLayout, BlankLayout} from '@/layouts'
+import { UserLayout, BasicLayout, BlankLayout } from '@/layouts'
 // import { bxAnaalyse } from '@/core/icons'
 
 const RouteView = {
@@ -287,6 +287,12 @@ export const asyncRouterMap = [
                 name: 'Ticket',
                 component: () => import('@/views/userinfo/component/Ticket.vue'),
                 meta: { title: '我的工单', hidden: true, keepAlive: true, permission: ['user'] }
+              },
+              {
+                path: '/account/ticketinfo',
+                name: 'TicketInfo',
+                component: () => import('@/views/userinfo/component/TicketInfo.vue'),
+                meta: { title: '工单详情', hidden: true, keepAlive: true, permission: ['user'] }
               }
             ]
           }

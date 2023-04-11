@@ -182,6 +182,14 @@ export const asyncRouterMap = [
           }
         ]
       },
+      {
+        path: '/item',
+        name: 'item',
+        component: () => import('@/views/item/ItemDetail.vue'),
+        meta: {
+          title: '商品详情'
+        }
+      },
       // {
       //   path: '/form',
       //   redirect: '/form/base-form',

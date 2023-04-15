@@ -43,7 +43,8 @@
           v-decorator="['password2', {rules: [{ required: true, message: $t('user.password.required') }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
         ></a-input-password>
       </a-form-item>
-
+      <Captcha />
+      <!-- TODO: 把图形验证码的判断放到获取短信验证码上：图形验证码不正确则无法获取短信，并在输入栏下提示-->
       <a-form-item>
         <a-input size="large" :placeholder="$t('user.login.mobile.placeholder')" v-decorator="['mobile', {rules: [{ required: true, message: $t('user.phone-number.required'), pattern: /^1[3456789]\d{9}$/ }, { validator: this.handlePhoneCheck } ], validateTrigger: ['change', 'blur'] }]">
           <a-select slot="addonBefore" size="large" defaultValue="+86">
@@ -59,25 +60,25 @@
             </a-select>
             <a-input style="width: 80%" size="large" placeholder="11 位手机号"></a-input>
           </a-input-group>-->
-
       <a-row :gutter="16">
         <a-col class="gutter-row" :span="16">
           <a-form-item>
-            <a-input size="large" type="text" :placeholder="$t('user.login.mobile.verification-code.placeholder')" v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]">
+            <a-input size="large" type="text" :placeholder="$t('user.login.mobile.verification-code.placeholder')" v-decorator="['verification', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]">
               <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
         </a-col>
         <a-col class="gutter-row" :span="8">
           <a-button
-            class="getCaptcha"
+            class="getVerificationCode"
             size="large"
-            :disabled="state.smsSendBtn"
-            @click.stop.prevent="getCaptcha"
-            v-text="!state.smsSendBtn && $t('user.register.get-verification-code')||(state.time+' s')"></a-button>
+            :disabled="!handleMobileInput"
+            @click.stop.prevent="getVerificationCode"
+            @click="handelCaptchaVerify"
+            v-text="!state.smsSendBtn && $t('user.register.get-verification-code')||(state.time+' s')">
+          </a-button>
         </a-col>
       </a-row>
-
       <a-form-item>
         <a-button
           size="large"
@@ -94,11 +95,12 @@
     </a-form>
   </div>
 </template>
-
 <script>
 import { getSmsCaptcha } from '@/api/login'
 import { deviceMixin } from '@/store/device-mixin'
 import { scorePassword } from '@/utils/util'
+import Captcha from '@/views/Captcha.vue'
+import { verifyCaptcha } from '@/api/captcha'
 
 const levelNames = {
   0: 'user.password.strength.short',
@@ -121,6 +123,7 @@ const levelColor = {
 export default {
   name: 'Register',
   components: {
+    Captcha
   },
   mixins: [deviceMixin],
   data () {
@@ -136,7 +139,9 @@ export default {
         percent: 10,
         progressColor: '#FF0000'
       },
-      registerBtn: false
+      registerBtn: false,
+      captcha: '',
+      mobile: ''
     }
   },
   computed: {
@@ -149,8 +154,12 @@ export default {
     passwordLevelColor () {
       return levelColor[this.state.passwordLevel]
     }
+    /* isButtonDisabled () {
+      return !this.phone || !this.captcha || this.state.smsSendBtn
+    } */
   },
   methods: {
+    verifyCaptcha,
     handlePasswordLevel (rule, value, callback) {
       if (!value) {
        return callback()
@@ -213,16 +222,26 @@ export default {
         }
       })
     },
-
-    getCaptcha (e) {
+    handleMobileInput () {
+      return this.mobile.length === 11
+    },
+    handleCaptchaInput (e) {
+      this.captcha = e.target.value
+    },
+    handelCaptchaVerify (res) {
+      console.log('handelCaptchaVerify, res', res)
+      if (res) {
+        this.verifyCaptcha(this.captcha)
+      }
+    },
+    getVerificationCode (e) {
       e.preventDefault()
       const { form: { validateFields }, state, $message, $notification } = this
 
-      validateFields(['mobile'], { force: true },
+      validateFields(['mobile, captcha'], { force: true },
         (err, values) => {
           if (!err) {
             state.smsSendBtn = true
-
             const interval = window.setInterval(() => {
               if (state.time-- <= 0) {
                 state.time = 60
@@ -266,6 +285,7 @@ export default {
     }
   }
 }
+
 </script>
 <style lang="less">
   .user-register {

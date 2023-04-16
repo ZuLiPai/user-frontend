@@ -11,9 +11,9 @@ const constantRouterComponents = {
   BlankLayout: BlankLayout,
   RouteView: RouteView,
   PageView: PageView,
-  '403': () => import(/* webpackChunkName: "error" */ '@/views/exception/403'),
-  '404': () => import(/* webpackChunkName: "error" */ '@/views/exception/404'),
-  '500': () => import(/* webpackChunkName: "error" */ '@/views/exception/500'),
+  403: () => import(/* webpackChunkName: "error" */ '@/views/exception/403'),
+  404: () => import(/* webpackChunkName: "error" */ '@/views/exception/404'),
+  500: () => import(/* webpackChunkName: "error" */ '@/views/exception/500'),
 
   // 你需要动态引入的页面组件
   // Workplace: () => import('@/views/dashboard/Workplace'),
@@ -59,7 +59,9 @@ const constantRouterComponents = {
   Favorite: () => import('@/views/userinfo/component/Favorite.vue'),
   Ticket: () => import('@/views/userinfo/component/Ticket.vue'),
   OrderDetail: () => import('@/views/order/OrderDetail.vue'),
-  CreateTicket: () => import('@/views/ticket/CreateTicket.vue')
+  CreateTicket: () => import('@/views/ticket/CreateTicket.vue'),
+  // Item
+  ItemDetail: () => import('@/views/item/ItemDetail.vue')
   // 'TestWork': () => import(/* webpackChunkName: "TestWork" */ '@/views/dashboard/TestWork')
 }
 
@@ -92,11 +94,11 @@ const rootRouter = {
  * @param token
  * @returns {Promise<Router>}
  */
-export const generatorDynamicRouter = token => {
+export const generatorDynamicRouter = (token) => {
   return new Promise((resolve, reject) => {
     loginService
       .getCurrentUserNav(token)
-      .then(res => {
+      .then((res) => {
         console.log('generatorDynamicRouter response:', res)
         const { result } = res
         const menuNav = []
@@ -111,7 +113,7 @@ export const generatorDynamicRouter = token => {
         console.log('routers', routers)
         resolve(routers)
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err)
       })
   })
@@ -125,7 +127,7 @@ export const generatorDynamicRouter = token => {
  * @returns {*}
  */
 export const generator = (routerMap, parent) => {
-  return routerMap.map(item => {
+  return routerMap.map((item) => {
     const { title, show, hideChildren, hiddenHeaderContent, target, icon } = item.meta || {}
     const currentRouter = {
       // 如果路由设置了 path，则作为默认 path，否则 路由地址 动态拼接生成如 /dashboard/workplace
@@ -176,7 +178,7 @@ export const generator = (routerMap, parent) => {
  * @param parentId 父ID
  */
 const listToTree = (list, tree, parentId) => {
-  list.forEach(item => {
+  list.forEach((item) => {
     // 判断是否为父级菜单
     if (item.parentId === parentId) {
       const child = {

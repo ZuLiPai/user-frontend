@@ -4,7 +4,7 @@ import { UserLayout, BasicLayout, BlankLayout } from '@/layouts'
 
 const RouteView = {
   name: 'RouteView',
-  render: h => h('router-view')
+  render: (h) => h('router-view')
 }
 
 export const asyncRouterMap = [
@@ -24,6 +24,16 @@ export const asyncRouterMap = [
           title: '首页',
           keepAlive: true,
           permission: ['dashboard'] // TODO:权限管理
+        }
+      },
+      {
+        path: '/item',
+        name: 'item',
+        component: () => import('@/views/item/ItemDetail.vue'),
+        meta: {
+          title: '商品详情',
+          keepAlive: true,
+          permission: ['dashboard']
         }
       },
       // dashboard
@@ -65,6 +75,12 @@ export const asyncRouterMap = [
             name: 'CreateOrder',
             component: () => import('@/views/order/CreateOrder'),
             meta: { title: '创建订单', keepAlive: true, permission: ['form'] }
+          },
+          {
+            path: '/item/detail',
+            name: 'ItemDetail',
+            component: () => import('@/views/item/ItemDetail'),
+            meta: { title: '商品详情', keepAlive: true, permission: ['form'] }
           }
         ]
       },

@@ -26,7 +26,7 @@ const userApi = {
  */
 export function login (parameter) {
   return request({
-    url: userApi.Login,
+    url: '/auth/token/',
     method: 'post',
     data: parameter
   })
@@ -42,7 +42,7 @@ export function getSmsCaptcha (parameter) {
 
 export function getInfo () {
   return request({
-    url: userApi.UserInfo,
+    url: '/users/info/',
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'

@@ -187,7 +187,6 @@ export default {
       target._originalData = undefined
     },
     toggle (key) {
-      console.log('key is ' + key)
       const newData = [...this.data]
       const target = newData.find(item => item.key === key)
       this.editKey = key
@@ -195,11 +194,6 @@ export default {
         target.editable = !target.editable
         this.data = newData
       }
-      // const target = this.data.find(item => item.key === key)
-      // this.editKey = key
-      // target._originalData = { ...target }
-      // target.editable = !target.editable
-      // console.log(target)
     },
     newAddress () {
       const length = this.data.length

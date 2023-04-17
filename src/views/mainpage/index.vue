@@ -46,7 +46,7 @@
       </a-row>
     </a-card>
     <div class="see-more">
-      <a-button>查看更多</a-button>
+      <a-button @click="router().push({name: 'search'})">查看更多</a-button>
     </div>
   </div>
 </template>
@@ -54,6 +54,7 @@
 <script>
 import ItemCard from '@/views/mainpage/components/ItemCard.vue'
 import BulletinBoard from '@/views/mainpage/components/BulletinBoard.vue'
+import router from '@/router'
 export default {
   name: 'Index',
   components: {
@@ -61,6 +62,9 @@ export default {
     BulletinBoard
   },
   methods: {
+    router () {
+      return router
+    },
     onSearch (value) {
       console.log(value)
     }

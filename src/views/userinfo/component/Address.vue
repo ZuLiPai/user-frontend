@@ -7,7 +7,7 @@
         :pagination="false"
         :loading="memberLoading"
       >
-        <template v-for="(col, i) in ['name', 'phoneNum', 'address']" :slot="col" slot-scope="text, record">
+        <template v-for="(col, i) in ['name', 'phone', 'address']" :slot="col" slot-scope="text, record">
           <a-input
             :key="col"
             v-if="record.editable"
@@ -34,7 +34,7 @@
             </span>
           </template>
           <span v-else>
-            <a @click="toggle(record.key)">编辑</a>
+            <a :disabled="editKey !== ''" @click="toggle(record.key)">编辑</a>
             <a-divider type="vertical" />
             <a-popconfirm title="是否要删除此行？" @confirm="remove(record.key)">
               <a>删除</a>
@@ -49,6 +49,10 @@
 </template>
 
 <script>
+import { addAddress, deleteAddress, getUserAddresses, updateAddress } from '@/api/address'
+import storage from 'store'
+import { message } from 'ant-design-vue'
+
 export default {
   data () {
     return {
@@ -78,10 +82,10 @@ export default {
         },
         {
           title: '手机号',
-          dataIndex: 'phoneNum',
-          key: 'phoneNum',
+          dataIndex: 'phone',
+          key: 'phone',
           width: '20%',
-          scopedSlots: { customRender: 'phoneNum' }
+          scopedSlots: { customRender: 'phone' }
         },
         {
           title: '收件地址',
@@ -96,40 +100,38 @@ export default {
           scopedSlots: { customRender: 'operation' }
         }
       ],
-      data: [
-        {
-          key: '1',
-          name: '小明',
-          phoneNum: '13800138000',
-          editable: false,
-          address: '北京市海淀区苏州街29号北京市八一学校'
-        },
-        {
-          key: '2',
-          name: '李莉',
-          phoneNum: '13900139000',
-          editable: false,
-          address: '北京市朝阳区平乐园100号北京工业大学'
-        },
-        {
-          key: '3',
-          name: '王小帅',
-          phoneNum: '16600012345',
-          editable: false,
-          address: '天津市和平区气象台路天津医科大学'
-        }
-      ],
+      data: [],
       loading: false,
-      memberLoading: false
+      memberLoading: false,
+      editKey: '',
+      userId: ''
     }
   },
   beforeCreate () {
     this.form = this.$form.createForm(this, { name: 'dynamic_form_item' })
     this.form.getFieldDecorator('keys', { initialValue: [], preserve: true })
   },
+  mounted () {
+    this.userId = storage.get('user_id')
+    getUserAddresses(this.userId).then(res => {
+      this.data = res
+      this.data.forEach((item) => {
+        item.key = item.id
+        item.editable = false
+      })
+      console.log(this.data)
+    })
+  },
   methods: {
     remove (key) {
+      const line = this.data.find(item => item.key === key)
+      if (line.id) {
+        deleteAddress(this.userId, line.id).then(res => {
+          message.success('删除地址成功')
+        })
+      }
       const newData = this.data.filter(item => item.key !== key)
+      this.editKey = ''
       this.data = newData
     },
     handleSubmit (e) {
@@ -145,23 +147,39 @@ export default {
     },
     saveRow (record) {
       this.memberLoading = true
-      const { key, name, phoneNum, address } = record
-      if (!name || !phoneNum || !address) {
+      const { key, name, phone, address } = record
+      if (!name || !phone || !address) {
         this.memberLoading = false
         this.$message.error('请填写完整地址信息。')
         return
       }
-      // 模拟网络请求、卡顿 800ms
-      new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({ loop: false })
-        }, 800)
-      }).then(() => {
-        const target = this.data.find(item => item.key === key)
-        target.editable = false
-        target.isNew = false
-        this.memberLoading = false
-      })
+      const line = this.data.find(item => item.key === key)
+      const data = {
+        name: line.name,
+        phone: line.phone,
+        address: line.address
+      }
+      if (line.id) {
+        // update
+        updateAddress(this.userId, line.id, data).then(res => {
+          message.success('更新地址成功')
+          const target = this.data.find(item => item.key === key)
+          target.editable = false
+          target.isNew = false
+          this.memberLoading = false
+          this.editKey = ''
+        })
+      } else {
+        // add
+        addAddress(this.userId, data).then(res => {
+          message.success('添加地址成功')
+          const target = this.data.find(item => item.key === key)
+          target.editable = false
+          target.isNew = false
+          this.memberLoading = false
+          this.editKey = ''
+        })
+      }
     },
     cancel (key) {
       const target = this.data.find(item => item.key === key)
@@ -169,16 +187,26 @@ export default {
       target._originalData = undefined
     },
     toggle (key) {
-      const target = this.data.find(item => item.key === key)
-      target._originalData = { ...target }
-      target.editable = !target.editable
+      console.log('key is ' + key)
+      const newData = [...this.data]
+      const target = newData.find(item => item.key === key)
+      this.editKey = key
+      if (target) {
+        target.editable = !target.editable
+        this.data = newData
+      }
+      // const target = this.data.find(item => item.key === key)
+      // this.editKey = key
+      // target._originalData = { ...target }
+      // target.editable = !target.editable
+      // console.log(target)
     },
     newAddress () {
       const length = this.data.length
       this.data.push({
         key: length === 0 ? '1' : (parseInt(this.data[length - 1].key) + 1).toString(),
         name: '',
-        phoneNum: '',
+        phone: '',
         address: '',
         editable: true,
         isNew: true

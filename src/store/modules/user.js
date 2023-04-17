@@ -8,6 +8,7 @@ import { info } from '@/mock/services/user'
 storage.addPlugin(expirePlugin)
 const user = {
   state: {
+    id: '',
     token: '',
     name: '',
     welcome: '',
@@ -17,6 +18,9 @@ const user = {
   },
 
   mutations: {
+    SET_ID: (state, id) => {
+      state.id = id
+    },
     SET_TOKEN: (state, token) => {
       state.token = token
     },
@@ -80,6 +84,14 @@ const user = {
         }).catch(error => {
           reject(error)
         })
+      })
+    },
+
+    GetUserID ({ commit }) {
+      getInfo().then(response => {
+        commit('SET_ID', response.id)
+        storage.set('user_id', response.id)
+        commit('SET_NAME', response.username)
       })
     },
 

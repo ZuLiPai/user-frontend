@@ -118,7 +118,7 @@
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { getSmsCaptcha, get2step } from '@/api/login'
+import { getSmsCaptcha, get2step, getInfo } from '@/api/login'
 
 export default {
   components: {
@@ -161,7 +161,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['Login', 'Logout']),
+    ...mapActions(['Login', 'Logout', 'GetUserID']),
     // handler
     handleUsernameOrEmail (rule, value, callback) {
       const { state } = this
@@ -255,6 +255,9 @@ export default {
       })
     },
     loginSuccess (res) {
+      getInfo().then(res => {
+        this.$store.dispatch('GetUserID')
+      })
       console.log(res)
       // check res.homePage define, set $router.push name res.homePage
       // Why not enter onComplete

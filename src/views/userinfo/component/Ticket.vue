@@ -1,42 +1,51 @@
 <template>
-  <a-table :columns="columns" :data-source="data">
-    <a slot="name" slot-scope="text">{{ text }}</a>
-    <span slot="customTitle">工单编号</span>
-    <span slot="tags" slot-scope="tags">
-      <a-tag
-        v-for="tag in tags"
-        :key="tag"
-        :color="tag === '未回复' ? 'red' : 'green'"
-      >
-        {{ tag.toUpperCase() }}
-      </a-tag>
-    </span>
-    <span slot="action">
-      <a>查看详情</a>
-      <a-divider type="vertical"/>
-      <a>关闭工单</a>
-    </span>
-  </a-table>
+  <div>
+    <a-button type="primary" style="margin-bottom: 15px" @click="router().push({name: 'CreateTicket'})">发起工单</a-button>
+    <a-table :columns="columns" :data-source="data">
+      <span slot="status" slot-scope="status">
+        <a-tag
+          :color="status === false ? 'red' : 'green'"
+        >
+          {{ status === false ? '工单开启中' : '工单已关闭' }}
+        </a-tag>
+      </span>
+      <span slot="action" slot-scope="record">
+        <a>查看详情</a>
+        <a-divider type="vertical"/>
+        <a-popconfirm
+          title="确定要关闭该工单吗？"
+          ok-text="确定"
+          cancel-text="取消"
+          @confirm="handleClose(record.key)"
+        >
+          <a>关闭工单</a>
+        </a-popconfirm>
+      </span>
+    </a-table>
+  </div>
 </template>
 
 <script>
+import router from '@/router'
+import storage from 'store'
+import { closeTicket, getUserTickets } from '@/api/ticket'
+
 const columns = [
   {
-    dataIndex: 'id',
-    key: 'id',
-    slots: { title: 'customTitle' },
-    scopedSlots: { customRender: 'name' }
+    title: '工单编号',
+    dataIndex: 'key',
+    key: 'key'
   },
   {
     title: '工单标题',
-    dataIndex: 'title',
-    key: 'title'
+    dataIndex: 'ticket_title',
+    key: 'ticket_title'
   },
   {
     title: '状态',
-    key: 'state',
-    dataIndex: 'state',
-    scopedSlots: { customRender: 'tags' }
+    key: 'ticket_status',
+    dataIndex: 'ticket_status',
+    scopedSlots: { customRender: 'status' }
   },
   {
     title: '操作',
@@ -45,52 +54,36 @@ const columns = [
   }
 ]
 
-const data = [
-  {
-    key: '1',
-    id: '1',
-    title: '相机价格详情',
-    state: ['未回复']
-  },
-   {
-    key: '2',
-    id: '2',
-    title: '相机价格详情2',
-    state: ['已回复']
-  },
-  {
-    key: '3',
-    id: '3',
-    title: '相机价格详情3',
-    state: ['已回复']
-  },
-  {
-    key: '4',
-    id: '4',
-    title: '相机价格详情4',
-    state: ['已回复']
-  },
-  {
-    key: '5',
-    id: '5',
-    title: '相机价格详情5',
-    state: ['已回复']
-  },
-  {
-    key: '6',
-    id: '6',
-    title: '相机价格详情6',
-    state: ['已回复']
-  }
-]
-
 export default {
   name: 'Ticket',
+  methods: {
+    router () {
+      return router
+    },
+    handleClose (key) {
+      closeTicket(key).then(resp => {
+        this.$message.success('关闭工单成功')
+        this.refreshTickets()
+      })
+    },
+    refreshTickets () {
+      getUserTickets(this.userId).then(resp => {
+        this.data = resp
+        this.data.forEach(item => {
+          item.key = item.ticket_id
+        })
+      })
+    }
+  },
   data () {
     return {
-      data,
+      userId: storage.get('user_id'),
+      data: [],
       columns
     }
+  },
+  mounted () {
+    this.refreshTickets()
   }
 }
 </script>

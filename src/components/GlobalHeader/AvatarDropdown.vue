@@ -10,15 +10,15 @@
           <a-icon type="user" />
           个人中心
         </a-menu-item>
-        <a-menu-item v-if="menu" key="settings" @click="handleToFavorite">
+        <a-menu-item v-if="menu" key="favorite" @click="handleToFavorite">
           <a-icon type="heart" />
           我的收藏
         </a-menu-item>
-        <a-menu-item v-if="menu" key="settings" @click="handleToTransaction">
+        <a-menu-item v-if="menu" key="orders" @click="handleToTransaction">
           <a-icon type="transaction" />
           我的订单
         </a-menu-item>
-        <a-menu-item v-if="menu" key="settings" @click="handleToHelp">
+        <a-menu-item v-if="menu" key="help" @click="handleToHelp">
           <a-icon type="question-circle" />
           帮助
         </a-menu-item>

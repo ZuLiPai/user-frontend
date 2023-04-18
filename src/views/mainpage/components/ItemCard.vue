@@ -15,9 +15,6 @@
 </template>
 
 <script>
-import { getTagsByItem } from '@/api/item'
-import { getImage } from '@/api/image'
-
 export default {
   name: 'ItemCard',
   props: {
@@ -33,13 +30,9 @@ export default {
     }
   },
   mounted () {
-    getTagsByItem(this.item.id).then(resp => {
-      this.tags = resp
-    })
-    if (this.item.first_image) {
-      getImage(this.item.first_image).then(resp => {
-        this.image = resp.url
-      })
+    this.tags = this.item.tags_item
+    if (this.item.first_image_url) {
+      this.image = this.item.first_image_url
     } else {
       this.image = 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
     }

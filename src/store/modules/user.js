@@ -82,6 +82,9 @@ const user = {
             reject(new Error('getInfo: roles must be a non-null array !'))
           }
         }).catch(error => {
+          commit('SET_TOKEN', '')
+          commit('SET_ROLES', [])
+          storage.remove(ACCESS_TOKEN)
           reject(error)
         })
       })
@@ -92,6 +95,10 @@ const user = {
         commit('SET_ID', response.id)
         storage.set('user_id', response.id)
         commit('SET_NAME', response.username)
+      }).catch(() => {
+        commit('SET_TOKEN', '')
+        commit('SET_ROLES', [])
+        storage.remove(ACCESS_TOKEN)
       })
     },
 

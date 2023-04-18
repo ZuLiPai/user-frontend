@@ -4,6 +4,7 @@ import storage from 'store'
 import notification from 'ant-design-vue/es/notification'
 import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
+import router from '@/router'
 
 // 创建 axios 实例
 const request = axios.create({
@@ -24,6 +25,7 @@ const errorHandler = (error) => {
         message: 'Forbidden',
         description: data.message
       })
+      router.push({ name: 'login' })
     }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
       notification.error({

@@ -183,8 +183,8 @@ export const asyncRouterMap = [
         ]
       },
       {
-        path: '/item',
-        name: 'item',
+        path: '/item/:id',
+        name: 'itemDetail',
         component: () => import('@/views/item/ItemDetail.vue'),
         meta: {
           title: '商品详情'

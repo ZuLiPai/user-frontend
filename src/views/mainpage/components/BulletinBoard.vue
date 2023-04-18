@@ -1,7 +1,7 @@
 <template>
   <a-carousel :autoplay="true">
     <div v-for="bulletin in bulletins" :key="bulletin.id" style="height: 200px">
-      <img :src="bulletin.image" alt="image" style="object-fit: contain; height: 100%; margin: 0 auto;"/>
+      <img :src="bulletin.image_url" alt="image" style="object-fit: contain; height: 100%; margin: 0 auto;"/>
     </div>
   </a-carousel>
 </template>
@@ -22,12 +22,6 @@ export default {
   mounted () {
     getBulletinList().then(resp => {
       this.bulletins = resp
-      this.bulletins.forEach(bulletin => {
-        getImage(bulletin.image).then(resp => {
-          bulletin.image = resp.url
-        })
-      })
-      console.log(this.bulletins)
     })
   },
   data () {

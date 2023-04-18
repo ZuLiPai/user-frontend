@@ -3,37 +3,24 @@
     <a-row :gutter="12">
       <a-col :span="4"></a-col>
       <a-col class="product-image" :span="8">
-        <!-- TODO:carousel not working properly -->
-        <a-carousel :after-change="onChange">
-          <div>
-            <img src="../../assets/resources/SonyA7m3.jpeg" alt="product image" style="width: 100%">
-          </div>
-          <div>
-            <img src="../../assets/resources/SonyA7m3.jpeg" alt="product image" style="width: 100%">
-          </div>
-          <div>
-            1
-          </div>
-        </a-carousel>
+        <img :src="data.first_image_url" alt="product image" style="width: 100%">
       </a-col>
       <a-col class="product-info" :span="8">
         <!-- 商品名称 -->
-        <h1 style="font-size: 40px">Sony/索尼A7M3</h1>
-        <h1 style="font-size: 20px; color: #999999">全画幅微单数码相机</h1>
+        <h1 style="font-size: 40px">{{ data.name }}</h1>
+        <h1 style="font-size: 20px; color: #999999">{{ data.type }}</h1>
         <!-- 商品标签 -->
-        <a-tag color="blue">相机</a-tag>
-        <a-tag color="orange">索尼</a-tag>
-        <a-tag color="purple">风光</a-tag>
-        <a-tag color="green">微单</a-tag>
+        <a-tag color="blue" v-for="tag in data.tags_item" :key="tag.id">{{ tag.tag_name }}</a-tag>
+
         <!-- TODO:添加chart -->
-        <p style="margin-bottom: 100px">租赁价格图</p>
+        <h1><span class="price-number">{{ data.price }}</span>元/天 起</h1>
         <!-- TODO:将下面两个按钮下对齐 -->
         <a-row :gutter="12">
           <a-col :span="8">
-            <a-button style="width: 100%">收藏</a-button>
+            <a-button style="width: 100%" @click="toggleFavorite">{{ favoriteStatus }}</a-button>
           </a-col>
           <a-col :span="16">
-            <a-button type="primary" style="width: 100%">立即租赁</a-button>
+            <a-button type="primary" style="width: 100%" @click="handleOrder">立即租赁</a-button>
           </a-col>
         </a-row>
       </a-col>
@@ -90,7 +77,7 @@
             </a-tab-pane>
             <a-tab-pane key="specifications" tab="产品规格">
               <!-- 规格表格 -->
-              <a-table :columns="columns" :data-source="data"></a-table>
+              <a-table :columns="columns" :data-source="data.specs" bordered></a-table>
             </a-tab-pane>
             <a-tab-pane key="samples" tab="样片">
               <!-- 样片图片 -->
@@ -105,21 +92,24 @@
 
 <script>
 
+import { addFavoriteItem, deleteFavoriteItem, getFavoriteItems, getItemById } from '@/api/item'
+import storage from 'store'
+
 export default {
   components: {
   },
   data () {
     return {
+      itemId: this.$route.params.id,
+      userId: storage.get('user_id'),
+      favoriteStatus: '收藏',
+      favoriteId: 0,
       avatarSrc: 'your-avatar-src',
       columns: [
-        { title: '规格1', dataIndex: 'spec1', key: 'spec1' },
-        { title: '规格2', dataIndex: 'spec2', key: 'spec2' },
-        { title: '规格3', dataIndex: 'spec3', key: 'spec3' }
+        { title: '规格', dataIndex: 'name', key: 'name', align: 'center' },
+        { title: '参数', dataIndex: 'value', key: 'value', align: 'center' }
       ],
-      data: [
-        { key: '1', spec1: 'value1', spec2: 'value2', spec3: 'value3' },
-        { key: '2', spec1: 'value1', spec2: 'value2', spec3: 'value3' }
-      ],
+      data: [],
       methods: {
         onChange (index) {
           console.log(index)
@@ -127,11 +117,56 @@ export default {
       },
       value: 3.5
     }
+  },
+  mounted () {
+    window.scrollTo(0, 0)
+    getItemById(this.itemId).then(resp => {
+      this.data = resp
+      if (!resp.first_image_url) {
+        this.data.first_image_url = 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
+      }
+    })
+    getFavoriteItems(this.userId).then(resp => {
+      // console.log(resp, this.itemId)
+      if (resp.find(item => item.item.toString() === this.itemId)) {
+        // this.$message.success('已收藏')
+        this.favoriteStatus = '已收藏'
+        this.favoriteId = resp.find(item => item.item.toString() === this.itemId).id
+      }
+    })
+  },
+  methods: {
+    toggleFavorite () {
+      if (this.favoriteStatus === '已收藏') {
+        const data = {
+          user: this.userId,
+          item: this.favoriteId
+        }
+        deleteFavoriteItem(data).then(resp => {
+          this.$message.success('已取消收藏')
+          this.favoriteStatus = '收藏'
+        })
+      } else {
+        const data = {
+          user: this.userId,
+          item: this.itemId
+        }
+        addFavoriteItem(data).then(resp => {
+          this.$message.success('收藏成功')
+          this.favoriteStatus = '已收藏'
+          this.favoriteId = resp.id
+        })
+      }
+    },
+    handleOrder () {
+      // TODO: pass param
+      this.$router.push({ name: 'CreateOrder' })
+    }
   }
 }
 </script>
 
-<style>
+<style scoped>
 ant.carousel >>> .slick-slide {
   text-align: center;
   height: 300px;
@@ -147,4 +182,11 @@ ant.carousel >>> .slick-slide {
   font-size: 15px;
   margin: 5px;
 }
+.price-number {
+  font-size: 40px;
+  font-weight: bold;
+  color: #ff4d4f;
+  margin-right: 10px;
+}
+
 </style>

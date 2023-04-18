@@ -9,7 +9,6 @@
 import AvatarDropdown from './AvatarDropdown'
 import SelectLang from '@/components/SelectLang'
 import { getInfo } from '@/api/login'
-import { getImage } from '@/api/image'
 
 export default {
   name: 'RightContent',
@@ -51,12 +50,15 @@ export default {
   },
   mounted () {
     getInfo().then(resp => {
-      getImage(resp.avatar).then(res => {
-        this.currentUser = {
-          name: resp.username,
-          avatarUrl: res.url
-        }
-      })
+      this.currentUser = {
+        name: resp.username,
+        avatarUrl: resp.avatar_url
+      }
+    }).catch(() => {
+      this.currentUser = {
+        name: 'Guest',
+        avatarUrl: ''
+      }
     })
   }
 }

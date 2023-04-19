@@ -28,3 +28,11 @@ export function closeTicket (id) {
     method: 'patch'
   })
 }
+
+export function createTicketMessage (id, data) {
+  return request({
+    url: `tickets/${id}/`,
+    method: 'post',
+    data: data
+  })
+}

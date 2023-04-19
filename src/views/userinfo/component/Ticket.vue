@@ -10,7 +10,7 @@
         </a-tag>
       </span>
       <span slot="action" slot-scope="record">
-        <a>查看详情</a>
+        <a @click="handleDetail(record.key)">查看详情</a>
         <a-divider type="vertical"/>
         <a-popconfirm
           title="确定要关闭该工单吗？"
@@ -18,7 +18,8 @@
           cancel-text="取消"
           @confirm="handleClose(record.key)"
         >
-          <a>关闭工单</a>
+          <a v-if="!record.ticket_status">关闭工单</a>
+          <a disabled v-else>工单已关闭</a>
         </a-popconfirm>
       </span>
     </a-table>
@@ -59,6 +60,9 @@ export default {
   methods: {
     router () {
       return router
+    },
+    handleDetail (key) {
+      this.router().push({ name: 'TicketDetail', params: { id: key } })
     },
     handleClose (key) {
       closeTicket(key).then(resp => {

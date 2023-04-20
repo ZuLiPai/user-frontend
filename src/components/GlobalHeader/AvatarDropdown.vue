@@ -4,7 +4,7 @@
       <a-avatar size="small" :src="currentUser.avatarUrl" class="antd-pro-global-header-index-avatar" />
       <span>{{ currentUser.name }}</span>
     </span>
-    <template v-slot:overlay>
+    <template v-slot:overlay v-if="currentUser.name !== 'Guest'">
       <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
         <a-menu-item v-if="menu" key="center" @click="handleToCenter">
           <a-icon type="user" />
@@ -29,6 +29,18 @@
         </a-menu-item>
       </a-menu>
     </template>
+    <template v-slot:overlay v-else>
+      <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
+        <a-menu-item v-if="menu" key="center" @click="router().push({name: 'login'})">
+          <a-icon type="user" />
+          登录
+        </a-menu-item>
+        <a-menu-item v-if="menu" key="favorite" @click="router().push({name: 'register'})">
+          <a-icon type="heart" />
+          注册
+        </a-menu-item>
+      </a-menu>
+    </template>
   </a-dropdown>
   <span v-else>
     <a-spin size="small" :style="{ marginLeft: 8, marginRight: 8 }" />
@@ -37,6 +49,7 @@
 
 <script>
 import { Modal } from 'ant-design-vue'
+import router from '@/router'
 
 export default {
   name: 'AvatarDropdown',
@@ -51,6 +64,9 @@ export default {
     }
   },
   methods: {
+    router () {
+      return router
+    },
     handleToCenter () {
       this.$router.push({ name: 'PersonalInfo' })
     },
@@ -72,7 +88,8 @@ export default {
           //   setTimeout(Math.random() > 0.5 ? resolve : reject, 1500)
           // }).catch(() => console.log('Oops errors!'))
           return this.$store.dispatch('Logout').then(() => {
-            this.$router.push({ name: 'login' })
+            this.$router.push({ name: 'index' })
+            location.reload()
           })
         },
         onCancel () {}

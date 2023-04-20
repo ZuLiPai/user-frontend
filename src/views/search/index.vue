@@ -2,7 +2,7 @@
   <div>
     <a-card :bordered="false" class="ant-pro-components-tag-select">
       <div class="ant-pro-page-header-search">
-        <a-input-search size="large" enter-button="搜索" style="width: 80%; max-width: 522px;"/>
+        <a-input-search v-model="searchText" size="large" enter-button="搜索" style="width: 80%; max-width: 522px;" @search="onSearch"/>
       </div>
       <a-form :form="form" layout="inline">
         <standard-form-row title="标签：" block style="padding-bottom: 11px;">
@@ -95,7 +95,8 @@ export default {
       data: [],
       tags: [],
       form: this.$form.createForm(this),
-      loading: true
+      loading: true,
+      searchText: ''
     }
   },
   filters: {
@@ -104,7 +105,12 @@ export default {
     }
   },
   mounted () {
-    this.refreshItems()
+    if (this.$route.query.name) {
+      this.searchText = this.$route.query.name
+      this.refreshItems({ name: this.searchText })
+    } else {
+      this.refreshItems()
+    }
   },
   methods: {
     handleItemDetail (id) {
@@ -114,13 +120,22 @@ export default {
       console.log(`selected ${value}`)
     },
     refreshItems (params) {
-      getItems().then(resp => {
+      getItems(params).then(resp => {
         this.data = resp
         this.loading = false
-        console.log(this.data)
       })
       getTags().then(resp => {
         this.tags = resp
+      })
+    },
+    onSearch () {
+      // this.$router.push({ name: 'search', query: { name: this.searchText } })
+      const params = {
+        name: this.searchText
+      }
+      getItems(params).then(resp => {
+        this.data = resp
+        this.loading = false
       })
     }
   }

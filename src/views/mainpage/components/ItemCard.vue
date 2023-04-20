@@ -30,7 +30,7 @@ export default {
     }
   },
   mounted () {
-    this.tags = this.item.tags_item
+    this.tags = this.tags_item
     if (this.item.first_image_url) {
       this.image = this.item.first_image_url
     } else {

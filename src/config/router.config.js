@@ -171,7 +171,8 @@ export const asyncRouterMap = [
         name: 'search',
         path: '/search',
         component: () => import('@/views/search'),
-        meta: { title: '搜索' }
+        meta: { title: '搜索' },
+        props: route => ({ name: route.query.name })
       },
       {
         name: 'comment',

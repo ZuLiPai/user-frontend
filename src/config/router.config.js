@@ -65,7 +65,7 @@ export const asyncRouterMap = [
             path: '/order/create',
             name: 'CreateOrder',
             component: () => import('@/views/order/CreateOrder'),
-            meta: { title: '创建订单', keepAlive: true, permission: ['form'] }
+            meta: { title: '创建订单', keepAlive: true, permission: ['form'], props: true }
           },
           {
             path: 'return',

@@ -71,7 +71,7 @@
             </div>
           </div>
           <div v-else>
-            <empty :description="暂无评论"/>
+            <empty description="暂无评论"/>
           </div>
         </a-col>
       </a-row>
@@ -170,7 +170,7 @@ export default {
     },
     handleOrder () {
       // TODO: pass param
-      this.$router.push({ name: 'CreateOrder' })
+      this.$router.push({ name: 'CreateOrder', params: { itemId: this.itemId } })
     }
   }
 }

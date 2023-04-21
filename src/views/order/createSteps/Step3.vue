@@ -21,10 +21,10 @@
       </div>
 
       <template #extra>
-        <a-button key="console" type="primary">
+        <a-button type="primary" @click="$router.push({name: 'Order'})">
           查看订单
         </a-button>
-        <a-button key="buy">
+        <a-button @click="$router.push({name: 'index'})">
           返回首页
         </a-button>
       </template>

@@ -14,7 +14,7 @@
           <a-icon type="heart" />
           我的收藏
         </a-menu-item>
-        <a-menu-item v-if="menu" key="orders" @click="handleToTransaction">
+        <a-menu-item v-if="menu" key="orders" @click="handleToOrder">
           <a-icon type="transaction" />
           我的订单
         </a-menu-item>
@@ -76,7 +76,7 @@ export default {
     handleToFavorite () {
       this.$router.push({ name: 'Favorite' })
     },
-    handleToTransaction () {
+    handleToOrder () {
       this.$router.push({ name: 'Order' })
     },
     handleLogout (e) {

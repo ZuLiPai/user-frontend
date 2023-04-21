@@ -168,6 +168,27 @@ export const asyncRouterMap = [
         hidden: true
       },
       {
+        name: 'ServeProtocol',
+        path: '/ServeProtocol',
+        component: () => import('@/views/userinfo/ServeProtocol.vue'),
+        meta: { title: '服务协议' },
+        hidden: true
+      },
+      {
+        name: 'RentProtocol',
+        path: '/RentProtocol',
+        component: () => import('@/views/userinfo/RentProtocol.vue'),
+        meta: { title: '租赁协议' },
+        hidden: true
+      },
+      {
+        name: 'PrivacyProtocol',
+        path: '/PrivacyProtocol',
+        component: () => import('@/views/userinfo/PrivacyProtocol.vue'),
+        meta: { title: '隐私协议' },
+        hidden: true
+      },
+      {
         name: 'search',
         path: '/search',
         component: () => import('@/views/search'),

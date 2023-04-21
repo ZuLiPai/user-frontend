@@ -1,6 +1,6 @@
 <template>
   <div class="item-card">
-    <a-card hoverable style="max-width: 280px; margin: 0 auto;">
+    <a-card hoverable style="max-width: 280px; margin: 0 auto;" @click="handleItemDetail(item.id)">
       <template #cover>
         <img alt="image" :src="image" width="100" />
       </template>
@@ -35,6 +35,11 @@ export default {
       this.image = this.item.first_image_url
     } else {
       this.image = 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
+    }
+  },
+  methods: {
+    handleItemDetail (id) {
+      this.$router.push({ name: 'itemDetail', params: { id: id } })
     }
   }
 

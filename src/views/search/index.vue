@@ -61,7 +61,7 @@
     <div class="ant-pro-pages-list-projects-cardList">
       <a-card>
         <a-list :loading="loading" :data-source="data" :grid="{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }">
-          <a-list-item slot="renderItem" slot-scope="item" @click="handleItemDetail(item.id)">
+          <a-list-item slot="renderItem" slot-scope="item">
             <item-card :item="item"/>
           </a-list-item>
         </a-list>
@@ -113,9 +113,6 @@ export default {
     }
   },
   methods: {
-    handleItemDetail (id) {
-      this.$router.push({ name: 'itemDetail', params: { id: id } })
-    },
     handleChange (value) {
       console.log(`selected ${value}`)
     },
@@ -130,6 +127,7 @@ export default {
     },
     onSearch () {
       // this.$router.push({ name: 'search', query: { name: this.searchText } })
+      this.loading = true
       const params = {
         name: this.searchText
       }

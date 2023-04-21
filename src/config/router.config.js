@@ -22,8 +22,8 @@ export const asyncRouterMap = [
         component: () => import('@/views/mainpage'),
         meta: {
           title: '首页',
-          keepAlive: true,
-          permission: ['dashboard'] // TODO:权限管理
+          keepAlive: true
+          // permission: ['dashboard'] // TODO:权限管理
         }
       },
       // dashboard

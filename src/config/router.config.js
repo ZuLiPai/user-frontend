@@ -4,7 +4,7 @@ import { UserLayout, BasicLayout, BlankLayout } from '@/layouts'
 
 const RouteView = {
   name: 'RouteView',
-  render: (h) => h('router-view')
+  render: h => h('router-view')
 }
 
 export const asyncRouterMap = [
@@ -22,18 +22,8 @@ export const asyncRouterMap = [
         component: () => import('@/views/mainpage'),
         meta: {
           title: '首页',
-          keepAlive: true,
-          permission: ['dashboard'] // TODO:权限管理
-        }
-      },
-      {
-        path: '/item',
-        name: 'item',
-        component: () => import('@/views/item/ItemDetail.vue'),
-        meta: {
-          title: '商品详情',
-          keepAlive: true,
-          permission: ['dashboard']
+          keepAlive: true
+          // permission: ['dashboard'] // TODO:权限管理
         }
       },
       // dashboard
@@ -66,204 +56,40 @@ export const asyncRouterMap = [
       // },
       // forms,
       {
-        path: '/1',
+        path: '/order',
+        redirect: '/order/create',
         component: RouteView,
-        meta: { title: '小熊写的' },
+        meta: { title: '订单' },
         children: [
           {
             path: '/order/create',
             name: 'CreateOrder',
             component: () => import('@/views/order/CreateOrder'),
-            meta: { title: '创建订单', keepAlive: true, permission: ['form'] }
+            meta: { title: '创建订单', keepAlive: true, permission: ['form'], props: true }
           },
           {
-            path: '/item/detail',
-            name: 'ItemDetail',
-            component: () => import('@/views/item/ItemDetail'),
-            meta: { title: '商品详情', keepAlive: true, permission: ['form'] }
-          }
-        ]
-      },
-      {
-        path: '/form',
-        redirect: '/form/base-form',
-        component: RouteView,
-        meta: { title: 'menu.form', icon: 'form', permission: ['form'] },
-        children: [
-          {
-            path: '/form/base-form',
-            name: 'BaseForm',
-            component: () => import('@/views/form/basicForm'),
-            meta: { title: 'menu.form.basic-form', keepAlive: true, permission: ['form'] }
+            path: 'return',
+            name: 'ReturnOrder',
+            component: () => import('@/views/order/ReturnOrder.vue'),
+            meta: {
+              title: '归还商品'
+            }
           },
           {
-            path: '/form/step-form',
-            name: 'StepForm',
-            component: () => import('@/views/form/stepForm/StepForm'),
-            meta: { title: 'menu.form.step-form', keepAlive: true, permission: ['form'] }
-          },
-          {
-            path: '/form/advanced-form',
-            name: 'AdvanceForm',
-            component: () => import('@/views/form/advancedForm/AdvancedForm'),
-            meta: { title: 'menu.form.advanced-form', keepAlive: true, permission: ['form'] }
-          }
-        ]
-      },
-      // list
-      {
-        path: '/list',
-        name: 'list',
-        component: RouteView,
-        redirect: '/list/table-list',
-        meta: { title: 'menu.list', icon: 'table', permission: ['table'] },
-        children: [
-          {
-            path: '/list/table-list/:pageNo([1-9]\\d*)?',
-            name: 'TableListWrapper',
-            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
-            component: () => import('@/views/list/TableList'),
-            meta: { title: 'menu.list.table-list', keepAlive: true, permission: ['table'] }
-          },
-          {
-            path: '/list/basic-list',
-            name: 'BasicList',
-            component: () => import('@/views/list/BasicList'),
-            meta: { title: 'menu.list.basic-list', keepAlive: true, permission: ['table'] }
-          },
-          {
-            path: '/list/card',
-            name: 'CardList',
-            component: () => import('@/views/list/CardList'),
-            meta: { title: 'menu.list.card-list', keepAlive: true, permission: ['table'] }
-          },
-          {
-            path: '/list/search',
-            name: 'SearchList',
-            component: () => import('@/views/list/search/SearchLayout'),
-            redirect: '/list/search/article',
-            meta: { title: 'menu.list.search-list', keepAlive: true, permission: ['table'] },
-            children: [
-              {
-                path: '/list/search/article',
-                name: 'SearchArticles',
-                component: () => import('../views/list/search/Article'),
-                meta: { title: 'menu.list.search-list.articles', permission: ['table'] }
-              },
-              {
-                path: '/list/search/project',
-                name: 'SearchProjects',
-                component: () => import('../views/list/search/Projects'),
-                meta: { title: 'menu.list.search-list.projects', permission: ['table'] }
-              },
-              {
-                path: '/list/search/application',
-                name: 'SearchApplications',
-                component: () => import('../views/list/search/Applications'),
-                meta: { title: 'menu.list.search-list.applications', permission: ['table'] }
-              }
-            ]
-          }
-        ]
-      },
-      {
-        path: '/return',
-        name: 'ReturnOrder',
-        component: () => import('@/views/order/ReturnOrder.vue'),
-        meta: {
-          title: '归还商品'
-        }
-      },
-      // profile
-      {
-        path: '/profile',
-        name: 'profile',
-        component: RouteView,
-        redirect: '/profile/basic',
-        meta: { title: 'menu.profile', icon: 'profile', permission: ['profile'] },
-        children: [
-          {
-            path: '/profile/basic',
-            name: 'ProfileBasic',
-            component: () => import('@/views/profile/basic'),
-            meta: { title: 'menu.profile.basic', permission: ['profile'] }
-          },
-          {
-            path: '/profile/advanced',
-            name: 'ProfileAdvanced',
-            component: () => import('@/views/profile/advanced/Advanced'),
-            meta: { title: 'menu.profile.advanced', permission: ['profile'] }
-          },
-          {
-            path: '/profile/detail',
+            path: 'detail',
             name: 'OrderDetail',
             component: () => import('@/views/order/OrderDetail.vue'),
             meta: { title: '订单详情', hidden: true, permission: ['user'] }
           }
         ]
       },
-
-      // result
-      {
-        path: '/result',
-        name: 'result',
-        component: RouteView,
-        redirect: '/result/success',
-        hidden: true,
-        meta: { title: 'menu.result', icon: 'check-circle-o', permission: ['result'] },
-        children: [
-          {
-            path: '/result/success',
-            name: 'ResultSuccess',
-            component: () => import(/* webpackChunkName: "result" */ '@/views/result/Success'),
-            meta: { title: 'menu.result.success', keepAlive: false, hiddenHeaderContent: true, permission: ['result'] }
-          },
-          {
-            path: '/result/fail',
-            name: 'ResultFail',
-            component: () => import(/* webpackChunkName: "result" */ '@/views/result/Error'),
-            meta: { title: 'menu.result.fail', keepAlive: false, hiddenHeaderContent: true, permission: ['result'] }
-          }
-        ]
-      },
-
-      // Exception
-      {
-        path: '/exception',
-        name: 'exception',
-        component: RouteView,
-        redirect: '/exception/403',
-        hidden: true,
-        meta: { title: 'menu.exception', icon: 'warning', permission: ['exception'] },
-        children: [
-          {
-            path: '/exception/403',
-            name: 'Exception403',
-            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/403'),
-            meta: { title: 'menu.exception.not-permission', permission: ['exception'] }
-          },
-          {
-            path: '/exception/404',
-            name: 'Exception404',
-            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404'),
-            meta: { title: 'menu.exception.not-find', permission: ['exception'] }
-          },
-          {
-            path: '/exception/500',
-            name: 'Exception500',
-            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/500'),
-            meta: { title: 'menu.exception.server-error', permission: ['exception'] }
-          }
-        ]
-      },
-
       // account
       {
         path: '/account',
         component: RouteView,
         redirect: '/account/info',
         name: 'account',
-        meta: { title: 'menu.account', icon: 'user', keepAlive: true, permission: ['user'] },
+        meta: { title: '账户', keepAlive: true, permission: ['user'] },
         hideChildrenInMenu: true,
         children: [
           {
@@ -317,14 +143,22 @@ export const asyncRouterMap = [
       {
         name: 'ticket',
         path: '/ticket',
-        component: () => import('@/views/ticket'),
-        meta: { title: '工单' }
-      },
-      {
-        path: '/createticket',
-        name: 'CreateTicket',
-        component: () => import('@/views/ticket/CreateTicket'),
-        meta: { title: '创建工单', hidden: true, permission: ['user'] }
+        component: RouteView,
+        meta: { title: '工单' },
+        children: [
+          {
+            path: 'create',
+            name: 'CreateTicket',
+            component: () => import('@/views/ticket/CreateTicket'),
+            meta: { title: '创建工单', hidden: true, permission: ['user'] }
+          },
+          {
+            path: 'detail/:id',
+            name: 'TicketDetail',
+            component: () => import('@/views/ticket/TicketDetail'),
+            meta: { title: '工单详情', hidden: true, permission: ['user'] }
+          }
+        ]
       },
       {
         name: 'help',
@@ -337,7 +171,8 @@ export const asyncRouterMap = [
         name: 'search',
         path: '/search',
         component: () => import('@/views/search'),
-        meta: { title: '搜索' }
+        meta: { title: '搜索' },
+        props: route => ({ name: route.query.name })
       },
       {
         name: 'comment',
@@ -351,6 +186,172 @@ export const asyncRouterMap = [
             path: '/comment/add',
             component: () => import('@/views/comment/AddComment.vue'),
             meta: { title: '添加评论' }
+          }
+        ]
+      },
+      {
+        path: '/item/:id',
+        name: 'itemDetail',
+        component: () => import('@/views/item/ItemDetail.vue'),
+        meta: {
+          title: '商品详情'
+        }
+      },
+      // {
+      //   path: '/form',
+      //   redirect: '/form/base-form',
+      //   component: RouteView,
+      //   meta: { title: 'menu.form', icon: 'form', permission: ['form'] },
+      //   children: [
+      //     {
+      //       path: '/form/base-form',
+      //       name: 'BaseForm',
+      //       component: () => import('@/views/form/basicForm'),
+      //       meta: { title: 'menu.form.basic-form', keepAlive: true, permission: ['form'] }
+      //     },
+      //     {
+      //       path: '/form/step-form',
+      //       name: 'StepForm',
+      //       component: () => import('@/views/form/stepForm/StepForm'),
+      //       meta: { title: 'menu.form.step-form', keepAlive: true, permission: ['form'] }
+      //     },
+      //     {
+      //       path: '/form/advanced-form',
+      //       name: 'AdvanceForm',
+      //       component: () => import('@/views/form/advancedForm/AdvancedForm'),
+      //       meta: { title: 'menu.form.advanced-form', keepAlive: true, permission: ['form'] }
+      //     }
+      //   ]
+      // },
+      // // list
+      // {
+      //   path: '/list',
+      //   name: 'list',
+      //   component: RouteView,
+      //   redirect: '/list/table-list',
+      //   meta: { title: 'menu.list', icon: 'table', permission: ['table'] },
+      //   children: [
+      //     {
+      //       path: '/list/table-list/:pageNo([1-9]\\d*)?',
+      //       name: 'TableListWrapper',
+      //       hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+      //       component: () => import('@/views/list/TableList'),
+      //       meta: { title: 'menu.list.table-list', keepAlive: true, permission: ['table'] }
+      //     },
+      //     {
+      //       path: '/list/basic-list',
+      //       name: 'BasicList',
+      //       component: () => import('@/views/list/BasicList'),
+      //       meta: { title: 'menu.list.basic-list', keepAlive: true, permission: ['table'] }
+      //     },
+      //     {
+      //       path: '/list/card',
+      //       name: 'CardList',
+      //       component: () => import('@/views/list/CardList'),
+      //       meta: { title: 'menu.list.card-list', keepAlive: true, permission: ['table'] }
+      //     },
+      //     {
+      //       path: '/list/search',
+      //       name: 'SearchList',
+      //       component: () => import('@/views/list/search/SearchLayout'),
+      //       redirect: '/list/search/article',
+      //       meta: { title: 'menu.list.search-list', keepAlive: true, permission: ['table'] },
+      //       children: [
+      //         {
+      //           path: '/list/search/article',
+      //           name: 'SearchArticles',
+      //           component: () => import('../views/list/search/Article'),
+      //           meta: { title: 'menu.list.search-list.articles', permission: ['table'] }
+      //         },
+      //         {
+      //           path: '/list/search/project',
+      //           name: 'SearchProjects',
+      //           component: () => import('../views/list/search/Projects'),
+      //           meta: { title: 'menu.list.search-list.projects', permission: ['table'] }
+      //         },
+      //         {
+      //           path: '/list/search/application',
+      //           name: 'SearchApplications',
+      //           component: () => import('../views/list/search/Applications'),
+      //           meta: { title: 'menu.list.search-list.applications', permission: ['table'] }
+      //         }
+      //       ]
+      //     }
+      //   ]
+      // },
+      // // profile
+      // {
+      //   path: '/profile',
+      //   name: 'profile',
+      //   component: RouteView,
+      //   redirect: '/profile/basic',
+      //   meta: { title: 'menu.profile', icon: 'profile', permission: ['profile'] },
+      //   children: [
+      //     {
+      //       path: '/profile/basic',
+      //       name: 'ProfileBasic',
+      //       component: () => import('@/views/profile/basic'),
+      //       meta: { title: 'menu.profile.basic', permission: ['profile'] }
+      //     },
+      //     {
+      //       path: '/profile/advanced',
+      //       name: 'ProfileAdvanced',
+      //       component: () => import('@/views/profile/advanced/Advanced'),
+      //       meta: { title: 'menu.profile.advanced', permission: ['profile'] }
+      //     }
+      //   ]
+      // },
+
+      // result
+      // {
+      //   path: '/result',
+      //   name: 'result',
+      //   component: RouteView,
+      //   redirect: '/result/success',
+      //   hidden: false,
+      //   meta: { title: 'menu.result', icon: 'check-circle-o', permission: ['result'] },
+      //   children: [
+      //     {
+      //       path: '/result/success',
+      //       name: 'ResultSuccess',
+      //       component: () => import(/* webpackChunkName: "result" */ '@/views/result/Success'),
+      //       meta: { title: 'menu.result.success', keepAlive: false, hiddenHeaderContent: true, permission: ['result'] }
+      //     },
+      //     {
+      //       path: '/result/fail',
+      //       name: 'ResultFail',
+      //       component: () => import(/* webpackChunkName: "result" */ '@/views/result/Error'),
+      //       meta: { title: 'menu.result.fail', keepAlive: false, hiddenHeaderContent: true, permission: ['result'] }
+      //     }
+      //   ]
+      // },
+
+      // Exception
+      {
+        path: '/exception',
+        name: 'exception',
+        component: RouteView,
+        redirect: '/exception/403',
+        hidden: true,
+        meta: { title: 'menu.exception', icon: 'warning', permission: ['exception'] },
+        children: [
+          {
+            path: '/exception/403',
+            name: 'Exception403',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/403'),
+            meta: { title: 'menu.exception.not-permission', permission: ['exception'] }
+          },
+          {
+            path: '/exception/404',
+            name: 'Exception404',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404'),
+            meta: { title: 'menu.exception.not-find', permission: ['exception'] }
+          },
+          {
+            path: '/exception/500',
+            name: 'Exception500',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/500'),
+            meta: { title: 'menu.exception.server-error', permission: ['exception'] }
           }
         ]
       }

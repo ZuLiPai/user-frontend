@@ -1,5 +1,5 @@
 <template>
-  <div :class="wrpCls">
+  <div :class="wrpCls" style="margin-right: 24px">
     <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" />
     <!--    <select-lang :class="prefixCls" />-->
   </div>
@@ -8,6 +8,7 @@
 <script>
 import AvatarDropdown from './AvatarDropdown'
 import SelectLang from '@/components/SelectLang'
+import { getInfo } from '@/api/login'
 
 export default {
   name: 'RightContent',
@@ -48,11 +49,17 @@ export default {
     }
   },
   mounted () {
-    setTimeout(() => {
+    getInfo().then(resp => {
       this.currentUser = {
-        name: 'Serati Ma'
+        name: resp.username,
+        avatarUrl: resp.avatar_url
       }
-    }, 1500)
+    }).catch(() => {
+      this.currentUser = {
+        name: 'Guest',
+        avatarUrl: ''
+      }
+    })
   }
 }
 </script>

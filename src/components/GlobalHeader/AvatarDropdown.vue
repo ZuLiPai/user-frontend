@@ -1,24 +1,24 @@
 <template>
   <a-dropdown v-if="currentUser && currentUser.name" placement="bottomRight">
     <span class="ant-pro-account-avatar">
-      <a-avatar size="small" src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" class="antd-pro-global-header-index-avatar" />
+      <a-avatar size="small" :src="currentUser.avatarUrl" class="antd-pro-global-header-index-avatar" />
       <span>{{ currentUser.name }}</span>
     </span>
-    <template v-slot:overlay>
+    <template v-slot:overlay v-if="currentUser.name !== 'Guest'">
       <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
         <a-menu-item v-if="menu" key="center" @click="handleToCenter">
           <a-icon type="user" />
           个人中心
         </a-menu-item>
-        <a-menu-item v-if="menu" key="settings" @click="handleToFavorite">
+        <a-menu-item v-if="menu" key="favorite" @click="handleToFavorite">
           <a-icon type="heart" />
           我的收藏
         </a-menu-item>
-        <a-menu-item v-if="menu" key="settings" @click="handleToTransaction">
+        <a-menu-item v-if="menu" key="orders" @click="handleToOrder">
           <a-icon type="transaction" />
           我的订单
         </a-menu-item>
-        <a-menu-item v-if="menu" key="settings" @click="handleToHelp">
+        <a-menu-item v-if="menu" key="help" @click="handleToHelp">
           <a-icon type="question-circle" />
           帮助
         </a-menu-item>
@@ -26,6 +26,18 @@
         <a-menu-item key="logout" @click="handleLogout">
           <a-icon type="logout" />
           {{ $t('menu.account.logout') }}
+        </a-menu-item>
+      </a-menu>
+    </template>
+    <template v-slot:overlay v-else>
+      <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
+        <a-menu-item v-if="menu" key="center" @click="router().push({name: 'login'})">
+          <a-icon type="user" />
+          登录
+        </a-menu-item>
+        <a-menu-item v-if="menu" key="favorite" @click="router().push({name: 'register'})">
+          <a-icon type="heart" />
+          注册
         </a-menu-item>
       </a-menu>
     </template>
@@ -37,6 +49,7 @@
 
 <script>
 import { Modal } from 'ant-design-vue'
+import router from '@/router'
 
 export default {
   name: 'AvatarDropdown',
@@ -51,6 +64,9 @@ export default {
     }
   },
   methods: {
+    router () {
+      return router
+    },
     handleToCenter () {
       this.$router.push({ name: 'PersonalInfo' })
     },
@@ -60,7 +76,7 @@ export default {
     handleToFavorite () {
       this.$router.push({ name: 'Favorite' })
     },
-    handleToTransaction () {
+    handleToOrder () {
       this.$router.push({ name: 'Order' })
     },
     handleLogout (e) {
@@ -72,7 +88,8 @@ export default {
           //   setTimeout(Math.random() > 0.5 ? resolve : reject, 1500)
           // }).catch(() => console.log('Oops errors!'))
           return this.$store.dispatch('Logout').then(() => {
-            this.$router.push({ name: 'login' })
+            this.$router.push({ name: 'index' })
+            location.reload()
           })
         },
         onCancel () {}

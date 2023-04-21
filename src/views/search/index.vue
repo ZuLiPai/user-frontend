@@ -2,21 +2,24 @@
   <div>
     <a-card :bordered="false" class="ant-pro-components-tag-select">
       <div class="ant-pro-page-header-search">
-        <a-input-search size="large" enter-button="搜索" style="width: 80%; max-width: 522px;"/>
+        <a-input-search v-model="searchText" size="large" enter-button="搜索" style="width: 80%; max-width: 522px;" @search="onSearch"/>
       </div>
       <a-form :form="form" layout="inline">
         <standard-form-row title="标签：" block style="padding-bottom: 11px;">
           <a-form-item>
             <tag-select>
-              <tag-select-option value="Category1">索尼</tag-select-option>
-              <tag-select-option value="Category2">佳能</tag-select-option>
-              <tag-select-option value="Category3">尼康</tag-select-option>
-              <tag-select-option value="Category4">适马</tag-select-option>
-              <tag-select-option value="Category5">森养</tag-select-option>
-              <tag-select-option value="Category6">腾龙</tag-select-option>
-              <tag-select-option value="Category7">大疆</tag-select-option>
-              <tag-select-option value="Category8">啊哈哈</tag-select-option>
-              <tag-select-option value="Category9">啦啦啦</tag-select-option>
+              <tag-select-option value="视频">视频</tag-select-option>
+              <tag-select-option value="均衡">均衡</tag-select-option>
+              <tag-select-option value="人像">人像</tag-select-option>
+              <tag-select-option value="旅游">旅游</tag-select-option>
+              <tag-select-option value="风光">风光</tag-select-option>
+              <tag-select-option value="水下">水下</tag-select-option>
+              <tag-select-option value="人文">人文</tag-select-option>
+              <tag-select-option value="星空">星空</tag-select-option>
+              <tag-select-option value="建筑">建筑</tag-select-option>
+              <tag-select-option value="演唱会">演唱会</tag-select-option>
+              <tag-select-option value="野生动物">野生动物</tag-select-option>
+              <tag-select-option value="航拍">航拍</tag-select-option>
             </tag-select>
           </a-form-item>
         </standard-form-row>
@@ -24,7 +27,7 @@
         <standard-form-row title="" grid last>
           <a-row>
             <a-col :lg="8" :md="10" :sm="10" :xs="24">
-              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="类型">
+              <a-form-item label="类型">
                 <a-select
                   style="min-width: 200px; width: 100%;"
                   mode="multiple"
@@ -39,7 +42,7 @@
               </a-form-item>
             </a-col>
             <a-col :lg="8" :md="10" :sm="10" :xs="24">
-              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="好评度">
+              <a-form-item label="好评度">
                 <a-select
                   style="min-width: 200px; width: 100%;"
                   placeholder="不限"
@@ -58,29 +61,8 @@
     <div class="ant-pro-pages-list-projects-cardList">
       <a-card>
         <a-list :loading="loading" :data-source="data" :grid="{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }">
-          <a-list-item slot="renderItem" slot-scope="">
-            <!--          <a-card class="ant-pro-pages-list-projects-card" hoverable>-->
-            <!--            <img slot="cover" :src="item.cover" :alt="item.title" />-->
-            <!--            <a-card-meta :title="item.title">-->
-            <!--              <template slot="description">-->
-            <!--                <ellipsis :length="50">{{ item.description }}</ellipsis>-->
-            <!--              </template>-->
-            <!--            </a-card-meta>-->
-            <!--            <div class="cardItemContent">-->
-            <!--              <span>{{ item.updatedAt | fromNow }}</span>-->
-            <!--              <div class="avatarList">-->
-            <!--                <avatar-list size="small" :max-length="2">-->
-            <!--                  <avatar-list-item-->
-            <!--                    v-for="(member, i) in item.members"-->
-            <!--                    :key="`${item.id}-avatar-${i}`"-->
-            <!--                    :src="member.avatar"-->
-            <!--                    :tips="member.name"-->
-            <!--                  />-->
-            <!--                </avatar-list>-->
-            <!--              </div>-->
-            <!--            </div>-->
-            <!--          </a-card>-->
-            <item-card/>
+          <a-list-item slot="renderItem" slot-scope="item">
+            <item-card :item="item"/>
           </a-list-item>
         </a-list>
       </a-card>
@@ -92,6 +74,7 @@
 import moment from 'moment'
 import { TagSelect, StandardFormRow, Ellipsis, AvatarList } from '@/components'
 import ItemCard from '@/views/mainpage/components/ItemCard'
+import { getItems, getTags } from '@/api/item'
 
 const TagSelectOption = TagSelect.Option
 const AvatarListItem = AvatarList.Item
@@ -110,8 +93,10 @@ export default {
   data () {
     return {
       data: [],
+      tags: [],
       form: this.$form.createForm(this),
-      loading: true
+      loading: true,
+      searchText: ''
     }
   },
   filters: {
@@ -120,16 +105,34 @@ export default {
     }
   },
   mounted () {
-    this.getList()
+    if (this.$route.query.name) {
+      this.searchText = this.$route.query.name
+      this.refreshItems({ name: this.searchText })
+    } else {
+      this.refreshItems()
+    }
   },
   methods: {
     handleChange (value) {
       console.log(`selected ${value}`)
     },
-    getList () {
-      this.$http.get('/list/article', { params: { count: 8 } }).then(res => {
-        console.log('res', res)
-        this.data = res.result
+    refreshItems (params) {
+      getItems(params).then(resp => {
+        this.data = resp
+        this.loading = false
+      })
+      getTags().then(resp => {
+        this.tags = resp
+      })
+    },
+    onSearch () {
+      // this.$router.push({ name: 'search', query: { name: this.searchText } })
+      this.loading = true
+      const params = {
+        name: this.searchText
+      }
+      getItems(params).then(resp => {
+        this.data = resp
         this.loading = false
       })
     }

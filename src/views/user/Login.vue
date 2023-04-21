@@ -114,11 +114,11 @@
 </template>
 
 <script>
-import md5 from 'md5'
+// import md5 from 'md5'
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { getSmsCaptcha, get2step } from '@/api/login'
+import { getSmsCaptcha, get2step, getInfo } from '@/api/login'
 
 export default {
   components: {
@@ -153,8 +153,15 @@ export default {
       })
     // this.requiredTwoStepCaptcha = true
   },
+  mounted () {
+    this.form.setFieldsValue({
+      rememberMe: true,
+      username: 'ajj',
+      password: 'xionghaonan'
+    })
+  },
   methods: {
-    ...mapActions(['Login', 'Logout']),
+    ...mapActions(['Login', 'Logout', 'GetUserID']),
     // handler
     handleUsernameOrEmail (rule, value, callback) {
       const { state } = this
@@ -189,7 +196,8 @@ export default {
           const loginParams = { ...values }
           delete loginParams.username
           loginParams[!state.loginType ? 'email' : 'username'] = values.username
-          loginParams.password = md5(values.password)
+          // loginParams.password = md5(values.password)
+          loginParams.password = values.password
           Login(loginParams)
             .then((res) => this.loginSuccess(res))
             .catch(err => this.requestFailed(err))
@@ -247,6 +255,9 @@ export default {
       })
     },
     loginSuccess (res) {
+      getInfo().then(res => {
+        this.$store.dispatch('GetUserID')
+      })
       console.log(res)
       // check res.homePage define, set $router.push name res.homePage
       // Why not enter onComplete

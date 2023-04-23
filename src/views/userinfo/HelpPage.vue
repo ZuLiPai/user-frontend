@@ -3,19 +3,18 @@
     <a-card :bordered="false" >
       <h2>帮助</h2>
       <p class="text">欢迎使用租立拍相机租赁平台！我们致力于为您提供最好的租赁体验。以下是一些常见问题和答案，以帮助您更好地使用我们的网站。</p><hr>
-      <a-list item-layout="horizontal" :data-source="data">
+      <a-list item-layout="horizontal" :data-source="data" size="large">
         <h3 :style="{ margin: '16px 0' }">
-          Large Size
         </h3>
         <a-list-item slot="renderItem" slot-scope="item">
           <a-list-item-meta
-            :description="item.description"
           >
-            <a slot="title">{{ item.title }}</a>
+            <a slot="title" style="font-size: 24px; color: #448ef7">{{ item.title }}</a>
             <a-avatar
               slot="avatar"
               src="https://scontent-sin6-3.xx.fbcdn.net/v/t39.30808-6/302176532_494844812648913_6723368798835528946_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=tSnhlYdLbH8AX-OAFNl&_nc_ht=scontent-sin6-3.xx&oh=00_AfDBO7h4nmVQR1X2E8Ex1peExlKXgox3j1VDsgbiBzGBTg&oe=6446FC68"
             />
+            <a slot="description" style="font-size: 18px; color: black; line-height: 40px" v-html="item.description">{{ item.description }}</a>
           </a-list-item-meta>
         </a-list-item>
       </a-list>
@@ -32,7 +31,7 @@ export default {
     const data = [
       {
         title: '1.\t如何注册账户？',
-        description: '点击网站右上角的“注册”按钮即可进入注册页面。您需要提供您的手机号以及设置密码。注册后，您可以登录并开始浏览和租赁我们的相机等设备。'
+        description: '点击网站右上角的“<a href="">注册</a>”按钮即可进入注册页面。您需要提供您的手机号以及设置密码。<br>注册后，您可以登录并开始浏览和租赁我们的相机等设备。'
       },
       {
         title: '2.\t如何浏览设备？',
@@ -64,7 +63,7 @@ export default {
       },
       {
         title: '9.\t如何取消订单？',
-        description: '如果您需要取消订单，请在我们的网站上登录并访问“我的订单”页面。找到您要取消的订单，并选择“取消订单”。请注意，订单取消可能会产生一定的费用，具体取决于您的租赁时间和设备类型。'
+        description: '如果您需要取消订单，请在我们的网站上登录并访问“我的订单”页面。找到您要取消的订单，并选择“取消订单”。<br>请注意，订单取消可能会产生一定的费用，具体取决于您的租赁时间和设备类型。'
       },
       {
         title: '10.\t否提前归还设备？',
@@ -84,7 +83,7 @@ export default {
       },
       {
         title: '14.\t如何查看订单历史？',
-        description: '在网站上登录后，您可以进入“我的订单”页面，查看您的订单历史记录。您可以查看订单的详细信息，包括租赁时间、设备信息、订单状态等。'
+        description: '在网站上登录后，您可以进入“我的订单”页面，查看您的订单历史记录。<br>您可以查看订单的详细信息，包括租赁时间、设备信息、订单状态等。'
       }
       ]
     return { data }
@@ -102,6 +101,6 @@ h2{
   text-align: center;
 }
 a-list{
-  font-size:64px;
+  font-size: 64px;
 }
 </style>

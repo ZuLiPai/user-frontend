@@ -15,7 +15,7 @@ export function verifyCaptcha (param) {
     method: 'post',
     params: {
       uuid: param.uuid,
-      code: param.code
+      code: param.captcha
     }
   })
 }

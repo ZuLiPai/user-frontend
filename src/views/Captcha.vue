@@ -2,7 +2,12 @@
   <a-row :gutter="16">
     <a-col class="gutter-row" :span="16">
       <a-form-item>
-        <a-input size="large" type="text" :placeholder="$t('user.login.mobile.verification-code.placeholder')" v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]">
+        <a-input
+          size="large"
+          type="text"
+          :placeholder="$t('user.login.mobile.verification-code.placeholder')"
+          v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]"
+        >
           <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
         </a-input>
       </a-form-item>
@@ -21,6 +26,7 @@ export default {
   name: 'Captcha',
   data () {
     return {
+      uuid: '',
       captcha: ''
     }
   },
@@ -29,17 +35,16 @@ export default {
   },
   methods: {
     async generateCaptcha () {
-      const uuid = uuidv4()
-      getCaptcha({ uuid: uuid }).then((resp) => {
+      this.uuid = uuidv4()
+      getCaptcha({ uuid: this.uuid }).then((resp) => {
         // console.log(resp)
         this.captcha = resp.data
       })
     },
-    async verifyCaptcha (captcha) {
-      const uuid = uuidv4()
-      verifyCaptcha({ uuid: uuid, captcha: captcha }).then((resp) => {
-        // console.log(resp)
-        return resp.data
+    async checkCaptcha (code, callback) {
+      console.log('checked captcha: ' + code)
+      verifyCaptcha({ uuid: this.uuid, captcha: code }).then((resp) => {
+        callback(resp)
       })
     }
   },

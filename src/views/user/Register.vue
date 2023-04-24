@@ -43,7 +43,13 @@
           v-decorator="['password2', {rules: [{ required: true, message: $t('user.password.required') }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
         ></a-input-password>
       </a-form-item>
-      <Captcha />
+      <Captcha ref="captchaComponent"></Captcha>
+      <!--将以下按钮删除-->
+      <a-button
+        size="large"
+        @click="handelCaptchaVerify">
+        test
+      </a-button>
       <!-- TODO: 把图形验证码的判断放到获取短信验证码上：图形验证码不正确则无法获取短信，并在输入栏下提示-->
       <a-form-item>
         <a-input size="large" :placeholder="$t('user.login.mobile.placeholder')" v-decorator="['mobile', {rules: [{ required: true, message: $t('user.phone-number.required'), pattern: /^1[3456789]\d{9}$/ }, { validator: this.handlePhoneCheck } ], validateTrigger: ['change', 'blur'] }]">
@@ -72,7 +78,6 @@
           <a-button
             class="getVerificationCode"
             size="large"
-            :disabled="!handleMobileInput"
             @click.stop.prevent="getVerificationCode"
             @click="handelCaptchaVerify"
             v-text="!state.smsSendBtn && $t('user.register.get-verification-code')||(state.time+' s')">
@@ -86,8 +91,8 @@
           htmlType="submit"
           class="register-button"
           :loading="registerBtn"
-          @click.stop.prevent="handleSubmit"
-          :disabled="registerBtn">{{ $t('user.register.register') }}
+          @click.stop.prevent="handleSubmit">
+          {{ $t('user.register.register') }}
         </a-button>
         <router-link class="login" :to="{ name: 'login' }">{{ $t('user.register.sign-in') }}</router-link>
       </a-form-item>
@@ -100,7 +105,6 @@ import { getSmsCaptcha } from '@/api/login'
 import { deviceMixin } from '@/store/device-mixin'
 import { scorePassword } from '@/utils/util'
 import Captcha from '@/views/Captcha.vue'
-import { verifyCaptcha } from '@/api/captcha'
 
 const levelNames = {
   0: 'user.password.strength.short',
@@ -142,6 +146,7 @@ export default {
       registerBtn: false,
       captcha: '',
       mobile: ''
+      // captchaVerified: false
     }
   },
   computed: {
@@ -159,7 +164,6 @@ export default {
     } */
   },
   methods: {
-    verifyCaptcha,
     handlePasswordLevel (rule, value, callback) {
       if (!value) {
        return callback()
@@ -228,10 +232,21 @@ export default {
     handleCaptchaInput (e) {
       this.captcha = e.target.value
     },
-    handelCaptchaVerify (res) {
+    async handelCaptchaVerify (res) {
       console.log('handelCaptchaVerify, res', res)
       if (res) {
-        this.verifyCaptcha(this.captcha)
+        const inputCaptcha = this.form.getFieldValue('captcha')
+        await this.$refs.captchaComponent.checkCaptcha(inputCaptcha, (result) => {
+          console.log(result)
+          if (result.result === true) {
+            console.log('图形验证码验证成功')
+          } else {
+            console.log('图形验证码验证失败')
+            this.$message.error('图形验证码有误，请重新输入')
+          }
+        })
+      } else {
+        this.$message.error('图形验证码有误，请重新输入')
       }
     },
     getVerificationCode (e) {

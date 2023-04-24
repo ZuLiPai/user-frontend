@@ -2,7 +2,7 @@
 import * as loginService from '@/api/login'
 // eslint-disable-next-line
 import { BasicLayout, BlankLayout, PageView, RouteView } from '@/layouts'
-import CreateTicket from '@/views/ticket/CreateTicket'
+// import CreateTicket from '@/views/ticket/CreateTicket'
 
 // 前端路由表 (基于动态)
 const constantRouterComponents = {

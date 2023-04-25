@@ -10,13 +10,21 @@
           <a-icon type="user" />
           个人中心
         </a-menu-item>
-        <a-menu-item v-if="menu" key="favorite" @click="handleToFavorite">
-          <a-icon type="heart" />
-          我的收藏
+        <a-menu-item v-if="menu" key="address" @click="router().push({name: 'Address'})">
+          <a-icon type="home" />
+          我的地址
         </a-menu-item>
         <a-menu-item v-if="menu" key="orders" @click="handleToOrder">
           <a-icon type="transaction" />
           我的订单
+        </a-menu-item>
+        <a-menu-item v-if="menu" key="favorite" @click="handleToFavorite">
+          <a-icon type="star" />
+          我的收藏
+        </a-menu-item>
+        <a-menu-item v-if="menu" key="ticket" @click="router().push({name: 'Ticket'})">
+          <a-icon type="form" />
+          我的工单
         </a-menu-item>
         <a-menu-item v-if="menu" key="help" @click="handleToHelp">
           <a-icon type="question-circle" />

@@ -24,7 +24,7 @@
 import Step1 from '@/views/order/createSteps/Step1.vue'
 import Step2 from '@/views/order/createSteps/Step2.vue'
 import Step3 from '@/views/order/createSteps/Step3.vue'
-
+// TODO: 现在获取的是所有人的地址，这怎么能行，前后端都得改（主要改后端）
 export default {
   name: 'CreateOrder',
   components: {

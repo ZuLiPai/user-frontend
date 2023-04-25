@@ -4,7 +4,7 @@
       <a-col :span="24">
         <a-card>
           <h1 style="font-size: 28px">工单系统</h1>
-          <h3>遇到了问题？请先<a>查看帮助</a></h3>
+          <h3>遇到了问题？请先<a @click="router().push({name: 'help'})">查看帮助</a></h3>
           <a-divider/>
           <h4>新建工单：</h4>
           <a-form>
@@ -46,6 +46,9 @@ export default {
     }
   },
   methods: {
+    router () {
+      return router
+    },
     handleSubmit () {
       if (!this.ticketMessage && !this.ticketMessage) {
         this.$message.error('请填写工单标题和内容')

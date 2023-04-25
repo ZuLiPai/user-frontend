@@ -14,6 +14,7 @@ export const asyncRouterMap = [
     component: BasicLayout,
     meta: { title: 'menu.home' },
     redirect: '/index',
+    hidden: true,
     children: [
       // Main Page
       {
@@ -91,6 +92,7 @@ export const asyncRouterMap = [
         name: 'account',
         meta: { title: '账户', keepAlive: true, permission: ['user'] },
         hideChildrenInMenu: true,
+        hidden: true,
         children: [
           {
             path: '/account',

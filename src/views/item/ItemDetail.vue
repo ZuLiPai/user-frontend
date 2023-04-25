@@ -17,9 +17,7 @@
         <!-- 商品标签 -->
         <a-tag color="blue" v-for="tag in data.tags_item" :key="tag.id">{{ tag.tag_name }}</a-tag>
 
-        <!-- TODO:添加chart -->
         <h1><span class="price-number">{{ data.price }}</span>元/天 起</h1>
-        <!-- TODO:将下面两个按钮下对齐 -->
         <a-row :gutter="12">
           <a-col :span="8">
             <a-button style="width: 100%" @click="toggleFavorite">{{ favoriteStatus }}</a-button>
@@ -44,7 +42,6 @@
             <a-tab-pane key="price" tab="租赁价格图">
               <price-chart ref="chart"/>
             </a-tab-pane>
-            <!--TODO:使标签占满整个tab-->
             <a-tab-pane key="description" tab="租赁流程说明及须知">
               <!-- 说明内容 -->
               请参阅<a @click="router().push({name: 'RentProtocol'})">《租立拍相机租赁平台客户租赁协议》</a>
@@ -179,7 +176,6 @@ export default {
       }
     },
     handleOrder () {
-      // TODO: pass param
       this.$router.push({ name: 'CreateOrder', params: { itemId: this.itemId } })
     }
   }

@@ -71,6 +71,7 @@
 </template>
 
 <script>
+// TODO: 现在只能用名字搜索，别的条件不行，要么删了
 import moment from 'moment'
 import { TagSelect, StandardFormRow, Ellipsis, AvatarList } from '@/components'
 import ItemCard from '@/views/mainpage/components/ItemCard'

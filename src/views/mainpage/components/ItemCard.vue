@@ -6,7 +6,7 @@
       </template>
       <a-card-meta :title="item.name">
         <template #description>
-          <a-tag v-for="t in tags" :key="t.id">{{ t.tag_name }}</a-tag>
+          <a-tag v-for="t in item.tags_item" :key="t.id">{{ t.tag_name }}</a-tag>
         </template>
       </a-card-meta>
       <p class="price-container"><span class="price">{{ item.price }}</span> <span class="price-description">元/天起</span></p>

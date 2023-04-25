@@ -39,9 +39,11 @@
     <a-divider/>
     <div>
       <a-row>
-        <a-col :span="4"></a-col>
-        <a-col :span="16">
+        <a-col :span="24">
           <a-tabs style="text-align: center" >
+            <a-tab-pane key="price" tab="租赁价格图">
+              <price-chart ref="chart"/>
+            </a-tab-pane>
             <!--TODO:使标签占满整个tab-->
             <a-tab-pane key="description" tab="租赁流程说明及须知">
               <!-- 说明内容 -->
@@ -54,7 +56,7 @@
       </a-row>
       <a-divider/>
       <a-row>
-        <a-col :span="6"></a-col>
+        <a-col :span="4"/>
         <a-col :span="16">
           <h2 style="margin-bottom: 10px">用户评价</h2>
           <div v-if="comments.length !== 0">
@@ -104,9 +106,11 @@ import { addFavoriteItem, deleteFavoriteItem, getFavoriteItems, getItemById } fr
 import storage from 'store'
 import { getComments } from '@/api/comment'
 import { Rate, Empty } from 'ant-design-vue'
+import PriceChart from '@/views/item/PriceChart.vue'
 
 export default {
   components: {
+    PriceChart,
     Rate,
     Empty
   },
@@ -132,6 +136,7 @@ export default {
       if (!resp.first_image_url) {
         this.data.first_image_url = 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
       }
+      this.$refs.chart.loadChart(resp.price)
     })
     getFavoriteItems(this.userId).then(resp => {
       // console.log(resp, this.itemId)

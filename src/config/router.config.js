@@ -21,6 +21,7 @@ export const asyncRouterMap = [
         path: '/index',
         name: 'mainpage',
         component: () => import('@/views/mainpage'),
+        hidden: true,
         meta: {
           title: '首页',
           keepAlive: true
@@ -147,6 +148,7 @@ export const asyncRouterMap = [
         path: '/ticket',
         component: RouteView,
         meta: { title: '工单' },
+        hidden: true,
         children: [
           {
             path: 'create',
@@ -195,6 +197,7 @@ export const asyncRouterMap = [
         path: '/search',
         component: () => import('@/views/search'),
         meta: { title: '搜索' },
+        hidden: true,
         props: route => ({ name: route.query.name })
       },
       {

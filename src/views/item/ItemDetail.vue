@@ -138,9 +138,8 @@ export default {
       this.$refs.chart.loadChart(resp.price)
     })
     getFavoriteItems(this.userId).then(resp => {
-      // console.log(resp, this.itemId)
+      // TODO:收藏状态显示有问题
       if (resp.find(item => item.item.toString() === this.itemId)) {
-        // this.$message.success('已收藏')
         this.favoriteStatus = '已收藏'
         this.favoriteId = resp.find(item => item.item.toString() === this.itemId).id
       }

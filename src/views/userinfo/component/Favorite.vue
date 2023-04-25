@@ -1,7 +1,7 @@
 <template>
   <a-row>
-    <a-col :sm="24" :md="8">
-      <ItemCard/>
+    <a-col :sm="24" :lg="8" :md="12" v-for="item in data" :key="item.id">
+      <ItemCard :item="item.item_detail"/>
     </a-col>
   </a-row>
 </template>
@@ -18,13 +18,13 @@ export default {
   name: 'Favorite',
   data () {
     return {
-      userId: storage.get('user_id')
+      userId: storage.get('user_id'),
+      data: []
     }
   },
   mounted () {
-    console.log('Favorite')
     getFavoriteItems(this.userId).then(resp => {
-      console.log(resp)
+      this.data = resp
     })
   }
 }

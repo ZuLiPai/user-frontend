@@ -47,9 +47,10 @@
             <!--TODO:使标签占满整个tab-->
             <a-tab-pane key="description" tab="租赁流程说明及须知">
               <!-- 说明内容 -->
+              请参阅<a @click="router().push({name: 'RentProtocol'})">《租立拍相机租赁平台客户租赁协议》</a>
             </a-tab-pane>
             <a-tab-pane key="protocol" tab="租立拍用户协议">
-              <img src="../../assets/resources/xuzhi.png" style="width: 400px">
+              请参阅<a @click="router().push({name: 'ServeProtocol'})">《租立拍相机租赁平台客户服务协议》</a>
             </a-tab-pane>
           </a-tabs>
         </a-col>
@@ -107,6 +108,7 @@ import storage from 'store'
 import { getComments } from '@/api/comment'
 import { Rate, Empty } from 'ant-design-vue'
 import PriceChart from '@/views/item/PriceChart.vue'
+import router from '@/router'
 
 export default {
   components: {
@@ -151,6 +153,9 @@ export default {
     })
   },
   methods: {
+    router () {
+      return router
+    },
     toggleFavorite () {
       if (this.favoriteStatus === '已收藏') {
         const data = {

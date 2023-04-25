@@ -214,6 +214,7 @@ export const asyncRouterMap = [
         path: '/item/:id',
         name: 'itemDetail',
         component: () => import('@/views/item/ItemDetail.vue'),
+        hidden: true,
         meta: {
           title: '商品详情'
         }

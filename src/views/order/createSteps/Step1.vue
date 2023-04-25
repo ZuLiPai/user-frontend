@@ -53,12 +53,12 @@
         <span class="price-number" style="color: #ff835d; font-size: 24px">{{ totalFee }}</span> 元
       </a-form-item>
       <a-form-item
-        label=""
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol">
+        label="">
         <a-checkbox
           v-decorator="['agreeLicense', { rules: [{required: true, message: '请同意协议'}] }]"
-        >同意<a href="#">协议</a></a-checkbox>
+        >同意<a @click="router().push({name: 'PrivacyProtocol'})">《租立拍相机租赁平台客户隐私协议》</a>、
+          <a @click="router().push({name: 'ServeProtocol'})">《租立拍相机租赁平台客户服务协议》</a>、
+          <a @click="router().push({name: 'RentProtocol'})">《租立拍相机租赁平台客户租赁协议》</a></a-checkbox>
       </a-form-item>
       <a-form-item :wrapperCol="{span: 19, offset: 5}">
         <a-button type="primary" @click="nextStep">下一步</a-button>
@@ -72,6 +72,7 @@ import { getItemById } from '@/api/item'
 import moment from 'moment'
 import storage from 'store'
 import { getUserAddresses } from '@/api/address'
+import router from '@/router'
 
 export default {
   name: 'Step1',
@@ -96,6 +97,9 @@ export default {
     }
   },
   methods: {
+    router () {
+      return router
+    },
     onAddAddress () {
       this.$router.push({ name: 'Address' })
     },
@@ -125,6 +129,8 @@ export default {
         this.fee = res.price
         this.deposit = res.deposit
       })
+    } else {
+      router.go(-1)
     }
     getUserAddresses(this.userId).then(res => {
       this.addresses = res

@@ -10,10 +10,6 @@
           <a-list-item-meta
           >
             <a slot="title" style="font-size: 24px; color: #448ef7">{{ item.title }}</a>
-            <a-avatar
-              slot="avatar"
-              src="https://scontent-sin6-3.xx.fbcdn.net/v/t39.30808-6/302176532_494844812648913_6723368798835528946_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=tSnhlYdLbH8AX-OAFNl&_nc_ht=scontent-sin6-3.xx&oh=00_AfDBO7h4nmVQR1X2E8Ex1peExlKXgox3j1VDsgbiBzGBTg&oe=6446FC68"
-            />
             <a slot="description" style="font-size: 18px; color: black; line-height: 40px" v-html="item.description">{{ item.description }}</a>
           </a-list-item-meta>
         </a-list-item>

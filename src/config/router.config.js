@@ -78,10 +78,16 @@ export const asyncRouterMap = [
             }
           },
           {
-            path: 'detail',
+            path: '/order/:id',
             name: 'OrderDetail',
             component: () => import('@/views/order/OrderDetail.vue'),
             meta: { title: '订单详情', hidden: true, permission: ['user'] }
+          },
+          {
+            path: '/test',
+            name: 'Test',
+            component: () => import('@/views/profile/advanced/Advanced.vue'),
+            meta: { title: '测试', hidden: true, permission: ['user'] }
           }
         ]
       },

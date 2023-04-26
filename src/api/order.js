@@ -6,3 +6,10 @@ export function getOrdersByUserId (id) {
     method: 'get'
   })
 }
+
+export function getOrderDetail (id) {
+  return request({
+    url: `/orders/${id}/`,
+    method: 'get'
+  })
+}

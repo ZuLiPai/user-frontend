@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-row>
+    <a-row style="max-width: 90%; margin: 0 auto">
       <a-col :span="24">
         <a-card>
           <h1 style="font-size: 28px">工单系统</h1>

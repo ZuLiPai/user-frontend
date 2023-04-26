@@ -15,9 +15,7 @@
             <p>总天数：{{ dateDiff(order) }}天</p>
           </a-col>
           <a-col :flex="1" align="center">
-            <a>详情</a>
-            <br>
-            <a>评价</a>
+            <a-button type="primary" @click="handleDetail(order.id)">订单详情</a-button>
           </a-col>
         </a-row>
       </a-card>
@@ -31,6 +29,7 @@ import storage from 'store'
 import { getOrdersByUserId } from '@/api/order'
 import { statusText } from '@/utils/orderStatus'
 import moment from 'moment'
+import router from '@/router'
 
 export default {
   name: 'Order',
@@ -50,6 +49,9 @@ export default {
   },
   methods: {
     statusText,
+    handleDetail (id) {
+      router.push({ name: 'OrderDetail', params: { id: id } })
+    },
     genTitle (order) {
       return '交易时间：' + order.create_time + ' 订单号：' + order.id
     },

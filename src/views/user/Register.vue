@@ -6,20 +6,27 @@
         <a-input
           size="large"
           type="text"
+          :placeholder="$t('user.register.username.placeholder')"
+          v-decorator="['username', {rules: [{ required: true, type: 'string', message: $t('user.username.required') }], validateTrigger: ['change', 'blur']}]"
+        ></a-input>
+      </a-form-item>
+      <a-form-item>
+        <a-input
+          size="large"
+          type="text"
           :placeholder="$t('user.register.email.placeholder')"
           v-decorator="['email', {rules: [{ required: true, type: 'email', message: $t('user.email.required') }], validateTrigger: ['change', 'blur']}]"
         ></a-input>
       </a-form-item>
-
       <a-popover
         placement="rightTop"
         :trigger="['focus']"
         :getPopupContainer="(trigger) => trigger.parentElement"
         v-model="state.passwordLevelChecked">
         <template slot="content">
-          <div :style="{ width: '240px' }" >
+          <div :style="{ width: '240px' }">
             <div :class="['user-register', passwordLevelClass]">{{ $t(passwordLevelName) }}</div>
-            <a-progress :percent="state.percent" :showInfo="false" :strokeColor=" passwordLevelColor " />
+            <a-progress :percent="state.percent" :showInfo="false" :strokeColor=" passwordLevelColor "/>
             <div style="margin-top: 10px;">
               <span>{{ $t('user.register.password.popover-message') }}
               </span>
@@ -44,60 +51,40 @@
         ></a-input-password>
       </a-form-item>
       <Captcha ref="captchaComponent"></Captcha>
-      <!--将以下按钮删除-->
-      <a-button
-        size="large"
-        @click="handelCaptchaVerify">
-        test
-      </a-button>
       <!-- TODO: 把图形验证码的判断放到获取短信验证码上：图形验证码不正确则无法获取短信，并在输入栏下提示-->
       <a-form-item>
-        <a-input size="large" :placeholder="$t('user.login.mobile.placeholder')" v-decorator="['mobile', {rules: [{ required: true, message: $t('user.phone-number.required'), pattern: /^1[3456789]\d{9}$/ }, { validator: this.handlePhoneCheck } ], validateTrigger: ['change', 'blur'] }]">
-          <a-select slot="addonBefore" size="large" defaultValue="+86">
-            <a-select-option value="+86">+86</a-select-option>
-            <a-select-option value="+87">+87</a-select-option>
-          </a-select>
+        <a-input size="large" :placeholder="$t('user.login.mobile.placeholder')" v-decorator="['phone', {rules: [{ required: true, message: $t('user.phone-number.required'), pattern: /^1[3456789]\d{9}$/ }, { validator: this.handlePhoneCheck } ], validateTrigger: ['change', 'blur'] }]">
         </a-input>
       </a-form-item>
-      <!--<a-input-group size="large" compact>
-            <a-select style="width: 20%" size="large" defaultValue="+86">
-              <a-select-option value="+86">+86</a-select-option>
-              <a-select-option value="+87">+87</a-select-option>
-            </a-select>
-            <a-input style="width: 80%" size="large" placeholder="11 位手机号"></a-input>
-          </a-input-group>-->
+
       <a-row :gutter="16">
         <a-col class="gutter-row" :span="16">
           <a-form-item>
-            <a-input size="large" type="text" :placeholder="$t('user.login.mobile.verification-code.placeholder')" v-decorator="['verification', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]">
+            <a-input size="large" :placeholder="$t('user.login.mobile.verification-code.placeholder')" v-decorator="['code', {rules: [{ required: true, message: $t('user.verification-code.required')}], validateTrigger: ['change', 'blur'] }]">
               <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
         </a-col>
         <a-col class="gutter-row" :span="8">
-          <a-button
-            class="getVerificationCode"
-            size="large"
-            @click.stop.prevent="getVerificationCode"
-            @click="handelCaptchaVerify"
-            v-text="!state.smsSendBtn && $t('user.register.get-verification-code')||(state.time+' s')">
-          </a-button>
+          <a-form-item>
+            <a-button
+              class="getVerificationCode"
+              size="large"
+              @click="handleSubmit">
+              获取验证码
+            </a-button>
+          </a-form-item>
         </a-col>
       </a-row>
-      <a-form-item>
-        <a-button
-          size="large"
-          type="primary"
-          htmlType="submit"
-          class="register-button"
-          :loading="registerBtn"
-          @click.stop.prevent="handleSubmit">
-          {{ $t('user.register.register') }}
-        </a-button>
-        <router-link class="login" :to="{ name: 'login' }">{{ $t('user.register.sign-in') }}</router-link>
-      </a-form-item>
-
     </a-form>
+    <a-button
+      size="large"
+      type="primary"
+      class="register-button"
+      @click="handleFinalSubmit">
+      {{ $t('user.register.register') }}
+    </a-button>
+    <router-link class="login" :to="{ name: 'login' }">{{ $t('user.register.sign-in') }}</router-link>
   </div>
 </template>
 <script>
@@ -105,6 +92,7 @@ import { getSmsCaptcha } from '@/api/login'
 import { deviceMixin } from '@/store/device-mixin'
 import { scorePassword } from '@/utils/util'
 import Captcha from '@/views/Captcha.vue'
+import { disableUser, enableUser, registerUser, sendSMS, verifySMS } from '@/api/register'
 
 const levelNames = {
   0: 'user.password.strength.short',
@@ -145,7 +133,11 @@ export default {
       },
       registerBtn: false,
       captcha: '',
-      mobile: ''
+      phone: '',
+      id: '',
+      code: '',
+      userData: '',
+      lastcaptch: ''
       // captchaVerified: false
     }
   },
@@ -166,18 +158,17 @@ export default {
   methods: {
     handlePasswordLevel (rule, value, callback) {
       if (!value) {
-       return callback()
+        return callback()
       }
-      console.log('scorePassword ; ', scorePassword(value))
       if (value.length >= 6) {
         if (scorePassword(value) >= 30) {
           this.state.level = 1
         }
         if (scorePassword(value) >= 60) {
-        this.state.level = 2
+          this.state.level = 2
         }
         if (scorePassword(value) >= 80) {
-        this.state.level = 3
+          this.state.level = 3
         }
       } else {
         this.state.level = 0
@@ -202,11 +193,13 @@ export default {
     },
 
     handlePhoneCheck (rule, value, callback) {
-      console.log('handlePhoneCheck, rule:', rule)
-      console.log('handlePhoneCheck, value', value)
-      console.log('handlePhoneCheck, callback', callback)
-
-      callback()
+      const phone = this.form.getFieldValue('phone')
+      if (value === undefined) {
+        callback(new Error(this.$t('user.phone.required')))
+      }
+      if (value && phone && value.trim() !== phone.trim()) {
+        callback(new Error(this.$t('user.phone-number.wrong-format')))
+      }
     },
 
     handlePasswordInputClick () {
@@ -218,12 +211,92 @@ export default {
     },
 
     handleSubmit () {
-      const { form: { validateFields }, state, $router } = this
-      validateFields({ force: true }, (err, values) => {
-        if (!err) {
-          state.passwordLevelChecked = false
-          $router.push({ name: 'registerResult', params: { ...values } })
+      console.log(this.form.getFieldValue('phone'))
+      const sendData = {
+        username: this.form.getFieldValue('username'),
+        password: this.form.getFieldValue('password'),
+        email: this.form.getFieldValue('email'),
+        phone: this.form.getFieldValue('phone')
+      }
+      const inputCaptcha = this.form.getFieldValue('captcha')
+      if (inputCaptcha === this.lastcaptch) {
+        this.$message.error('请点击图像验证码获取新验证码')
+        return
+      }
+      this.$refs.captchaComponent.checkCaptcha(inputCaptcha, (result) => {
+        if (result.result === true) {
+          this.lastcaptch = inputCaptcha
+          console.log('This is send data:', sendData)
+          registerUser(sendData).then((r) => {
+            console.log('注册成功', r)
+            this.userData = r
+            disableUser(this.userData.id).then(() => {
+              console.log('锁定用户了')
+              const SMSdata = {
+                phone: this.userData.phone,
+                id: this.userData.id
+              }
+              sendSMS(SMSdata).then(() => {
+                this.$message.success('验证码发送成功，请注意查收')
+              })
+            })
+          }).catch((r) => {
+          console.log('Fail：' + r)
+          this.$message.error('出错了，请重新注册')
+          })
+        } else {
+          this.$message.error('图形验证码有误，请重新输入')
         }
+      }).catch((r) => console.log('Fail' + r.data))
+      // const { form: { validateFields }, state } = this
+      // validateFields((err, values) => {
+      //   console.log('jin')
+      //   if (!err) {
+      //     state.passwordLevelChecked = false
+      //     this.$refs.captchaComponent.checkCaptcha(values.captcha, (result) => {
+      //       if (result.result === true) {
+      //         console.log('图形验证码验证成功')
+      //         console.log(values)
+      //         registerUser(values).then((r) => {
+      //           console.log(r.data)
+      //           this.id = r.data.id
+      //           disableUser(this.id)
+      //         }).catch((r) => console.log('Fail' + r))
+      //       } else {
+      //         this.$message.error('图形验证码有误，请重新输入')
+      //       }
+      //     })
+      //   }
+      // })
+    },
+    handleFinalSubmit () {
+      this.code = this.form.getFieldValue('code')
+      console.log(this.code)
+      if (this.code === '') {
+        this.$message.error('请输入验证码')
+        return
+      }
+      if (this.userData === '') {
+        this.$message.error('请先完成上方表单内容')
+        return
+      }
+      const codeData = {
+        code: this.code,
+        phone: this.userData.phone
+      }
+      console.log('codeData:', codeData)
+      verifySMS(codeData).then(() => {
+        console.log('验证成功了')
+        enableUser(this.userData.id).then(() => {
+          // $router.push({ name: '', params: { ...values } })
+          console.log('解锁用户了')
+          this.$message.success('注册成功！').then(() =>
+              this.$router.push({ name: 'registerResult', params: { ...this.userData } })
+          )
+        })
+      })
+      .catch((e) => {
+        this.$message.error('出错啦', e)
       })
     },
     handleMobileInput () {
@@ -240,13 +313,17 @@ export default {
           console.log(result)
           if (result.result === true) {
             console.log('图形验证码验证成功')
+            return result.result
           } else {
             console.log('图形验证码验证失败')
             this.$message.error('图形验证码有误，请重新输入')
+            return result.result
           }
         })
       } else {
+        console.log('No input')
         this.$message.error('图形验证码有误，请重新输入')
+        return false
       }
     },
     getVerificationCode (e) {
@@ -254,35 +331,35 @@ export default {
       const { form: { validateFields }, state, $message, $notification } = this
 
       validateFields(['mobile, captcha'], { force: true },
-        (err, values) => {
-          if (!err) {
-            state.smsSendBtn = true
-            const interval = window.setInterval(() => {
-              if (state.time-- <= 0) {
+          (err, values) => {
+            if (!err) {
+              state.smsSendBtn = true
+              const interval = window.setInterval(() => {
+                if (state.time-- <= 0) {
+                  state.time = 60
+                  state.smsSendBtn = false
+                  window.clearInterval(interval)
+                }
+              }, 1000)
+
+              const hide = $message.loading('验证码发送中..', 0)
+
+              getSmsCaptcha({ mobile: values.mobile }).then(res => {
+                setTimeout(hide, 2500)
+                $notification['success']({
+                  message: '提示',
+                  description: '验证码获取成功，您的验证码为：' + res.result.captcha,
+                  duration: 8
+                })
+              }).catch(err => {
+                setTimeout(hide, 1)
+                clearInterval(interval)
                 state.time = 60
                 state.smsSendBtn = false
-                window.clearInterval(interval)
-              }
-            }, 1000)
-
-            const hide = $message.loading('验证码发送中..', 0)
-
-            getSmsCaptcha({ mobile: values.mobile }).then(res => {
-              setTimeout(hide, 2500)
-              $notification['success']({
-                message: '提示',
-                description: '验证码获取成功，您的验证码为：' + res.result.captcha,
-                duration: 8
+                this.requestFailed(err)
               })
-            }).catch(err => {
-              setTimeout(hide, 1)
-              clearInterval(interval)
-              state.time = 60
-              state.smsSendBtn = false
-              this.requestFailed(err)
-            })
+            }
           }
-        }
       )
     },
     requestFailed (err) {
@@ -303,49 +380,49 @@ export default {
 
 </script>
 <style lang="less">
-  .user-register {
+.user-register {
 
-    &.error {
-      color: #ff0000;
-    }
-
-    &.warning {
-      color: #ff7e05;
-    }
-
-    &.success {
-      color: #52c41a;
-    }
-
+  &.error {
+    color: #ff0000;
   }
 
-  .user-layout-register {
-    .ant-input-group-addon:first-child {
-      background-color: #fff;
-    }
+  &.warning {
+    color: #ff7e05;
   }
+
+  &.success {
+    color: #52c41a;
+  }
+
+}
+
+.user-layout-register {
+  .ant-input-group-addon:first-child {
+    background-color: #fff;
+  }
+}
 </style>
 <style lang="less" scoped>
-  .user-layout-register {
+.user-layout-register {
 
-    & > h3 {
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-
-    .getCaptcha {
-      display: block;
-      width: 100%;
-      height: 40px;
-    }
-
-    .register-button {
-      width: 50%;
-    }
-
-    .login {
-      float: right;
-      line-height: 40px;
-    }
+  & > h3 {
+    font-size: 16px;
+    margin-bottom: 20px;
   }
+
+  .getCaptcha {
+    display: block;
+    width: 100%;
+    height: 40px;
+  }
+
+  .register-button {
+    width: 50%;
+  }
+
+  .login {
+    float: right;
+    line-height: 40px;
+  }
+}
 </style>

@@ -16,6 +16,7 @@ export default {
   'user.login.login': '登录',
   'user.register.register': '注册',
   'user.register.email.placeholder': '邮箱',
+  'user.register.username.placeholder': '用户名',
   'user.register.password.placeholder': '请至少输入 6 个字符。请不要使用容易被猜到的密码。',
   'user.register.password.popover-message': '请至少输入 6 个字符。请不要使用容易被猜到的密码。',
   'user.register.confirm-password.placeholder': '确认密码',
@@ -25,6 +26,7 @@ export default {
   'user.register-result.activation-email':
     '激活邮件已发送到你的邮箱中，邮件有效期为24小时。请及时登录邮箱，点击邮件中的链接激活帐户。',
   'user.register-result.back-home': '返回首页',
+  'user.username.required': '请输入用户名！',
   'user.register-result.view-mailbox': '查看邮箱',
   'user.email.required': '请输入邮箱地址！',
   'user.email.wrong-format': '邮箱地址格式错误！',

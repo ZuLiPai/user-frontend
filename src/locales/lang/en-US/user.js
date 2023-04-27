@@ -17,6 +17,7 @@ export default {
   'user.login.login': 'Login',
   'user.register.register': 'Register',
   'user.register.email.placeholder': 'Email',
+  'user.register.username.placeholder': 'Username',
   'user.register.password.placeholder': 'Password ',
   'user.register.password.popover-message': 'Please enter at least 6 characters. Please do not use passwords that are easy to guess. ',
   'user.register.confirm-password.placeholder': 'Confirm password',
@@ -26,6 +27,7 @@ export default {
   'user.register-result.activation-email':
     'The activation email has been sent to your email address and is valid for 24 hours. Please log in to the email in time and click on the link in the email to activate the account.',
   'user.register-result.back-home': 'Back to home',
+  'user.username.required': 'Please enter your username！',
   'user.register-result.view-mailbox': 'View mailbox',
   'user.email.required': 'Please enter your email!',
   'user.email.wrong-format': 'The email address is in the wrong format!',

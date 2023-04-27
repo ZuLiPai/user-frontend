@@ -78,3 +78,11 @@ export function get2step (parameter) {
     data: parameter
   })
 }
+
+export async function recoverPassword (parameter) {
+  return request({
+    url: `/users/reset_password/`,
+    method: 'post',
+    data: parameter
+  })
+}

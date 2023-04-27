@@ -43,7 +43,7 @@
         </a-tab-pane>
         <a-tab-pane key="tab2" :tab="$t('user.login.tab-login-mobile')">
           <a-form-item>
-            <a-input size="large" type="text" :placeholder="$t('user.login.mobile.placeholder')" v-decorator="['mobile', {rules: [{ required: true, pattern: /^1[34578]\d{9}$/, message: $t('user.login.mobile.placeholder') }], validateTrigger: 'change'}]">
+            <a-input size="large" type="text" :placeholder="$t('user.login.mobile.placeholder')" v-decorator="['mobile', {rules: [{ required: true, pattern: /^1[34578]\d{9}$/, message: $t('user.phone-number.required') }], validateTrigger: 'change'}]">
               <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
@@ -73,7 +73,7 @@
         <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]">{{ $t('user.login.remember-me') }}</a-checkbox>
         <router-link class="register" :to="{ name: 'register' }" style="float: right;">{{ $t('user.login.signup') }}</router-link>
         <router-link
-          :to="{ name: 'recover', params: { user: 'aaa'} }"
+          :to="{ name: 'recover', params: { user: ''} }"
           class="forge-password"
           style="float: right; margin-right: 20px;"
         >{{ $t('user.login.forgot-password') }}</router-link>
@@ -118,7 +118,8 @@
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { getSmsCaptcha, get2step, getInfo } from '@/api/login'
+import { getInfo } from '@/api/login'
+import { sendSMS, verifySMS } from '@/api/register'
 
 export default {
   components: {
@@ -144,20 +145,20 @@ export default {
     }
   },
   created () {
-    get2step({ })
-      .then(res => {
-        this.requiredTwoStepCaptcha = res.result.stepCode
-      })
-      .catch(() => {
-        this.requiredTwoStepCaptcha = false
-      })
+    // get2step({ })
+    //   .then(res => {
+    //     this.requiredTwoStepCaptcha = res.result.stepCode
+    //   })
+    //   .catch(() => {
+    //     this.requiredTwoStepCaptcha = false
+    //   })
     // this.requiredTwoStepCaptcha = true
   },
   mounted () {
     this.form.setFieldsValue({
-      rememberMe: true,
-      username: 'ajj',
-      password: 'xionghaonan'
+      rememberMe: false,
+      username: '',
+      password: ''
     })
   },
   methods: {
@@ -192,18 +193,33 @@ export default {
 
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          console.log('login form', values)
-          const loginParams = { ...values }
-          delete loginParams.username
-          loginParams[!state.loginType ? 'email' : 'username'] = values.username
-          // loginParams.password = md5(values.password)
-          loginParams.password = values.password
-          Login(loginParams)
-            .then((res) => this.loginSuccess(res))
-            .catch(err => this.requestFailed(err))
-            .finally(() => {
-              state.loginBtn = false
+          if (customActiveKey === 'tab1') {
+            console.log('login form', values)
+            const loginParams = { ...values }
+            delete loginParams.username
+            loginParams[!state.loginType ? 'email' : 'username'] = values.username
+            // loginParams.password = md5(values.password)
+            loginParams.password = values.password
+            console.log('data:', loginParams)
+            Login(loginParams)
+                .then((res) => this.loginSuccess(res))
+                .catch(err => this.requestFailed(err))
+                .finally(() => {
+                  state.loginBtn = false
+                })
+          } else {
+            console.log('sms login', values)
+            const loginParams = { ...values }
+            const data = {
+              phone: loginParams.mobile,
+              code: loginParams.captcha
+            }
+            verifySMS(data).then((resp) => {
+              if (resp.status === 200) {
+                // TODO: How to no password login
+              }
             })
+          }
         } else {
           setTimeout(() => {
             state.loginBtn = false
@@ -218,7 +234,6 @@ export default {
       validateFields(['mobile'], { force: true }, (err, values) => {
         if (!err) {
           state.smsSendBtn = true
-
           const interval = window.setInterval(() => {
             if (state.time-- <= 0) {
               state.time = 60
@@ -228,13 +243,16 @@ export default {
           }, 1000)
 
           const hide = this.$message.loading('验证码发送中..', 0)
-          getSmsCaptcha({ mobile: values.mobile }).then(res => {
+          sendSMS({ phone: values.mobile }).then(res => {
             setTimeout(hide, 2500)
-            this.$notification['success']({
-              message: '提示',
-              description: '验证码获取成功，您的验证码为：' + res.result.captcha,
-              duration: 8
-            })
+            if (res.status === 200) {
+              this.$notification['success']({
+                message: '提示',
+                // description: '验证码获取成功，您的验证码为：' + res.result.captcha,
+                description: '验证码获取成功，请注意查收',
+                duration: 8
+              })
+            }
           }).catch(err => {
             setTimeout(hide, 1)
             clearInterval(interval)

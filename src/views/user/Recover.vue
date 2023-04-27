@@ -50,7 +50,7 @@
           size="large"
           :placeholder="$t('user.register.confirm-password.placeholder')"
           v-decorator="[
-            'password',
+            'password2',
             {rules: [{ required: true, message: $t('user.password.required') }], validateTrigger: 'blur'}
           ]"
         >
@@ -70,7 +70,7 @@
           class="login-button"
           :loading="state.loginBtn"
           :disabled="state.loginBtn"
-        >找回密码</a-button>
+        >重置密码</a-button>
       </a-form-item>
     </a-form>
 
@@ -84,11 +84,11 @@
 </template>
 
 <script>
-import md5 from 'md5'
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { getSmsCaptcha, get2step } from '@/api/login'
+import { get2step, recoverPassword } from '@/api/login'
+import { sendSMS } from '@/api/register'
 
 export default {
   components: {
@@ -144,34 +144,34 @@ export default {
       e.preventDefault()
       const {
         form: { validateFields },
-        state,
-        customActiveKey,
-        Login
+        state
       } = this
 
       state.loginBtn = true
-
-      const validateFieldsKey = customActiveKey === 'tab1' ? ['username', 'password'] : ['mobile', 'captcha']
-
-      validateFields(validateFieldsKey, { force: true }, (err, values) => {
+      validateFields(['mobile', 'captcha', 'password', 'password2'], { force: true }, (err, values) => {
         if (!err) {
-          console.log('login form', values)
-          const loginParams = { ...values }
-          delete loginParams.username
-          loginParams[!state.loginType ? 'email' : 'username'] = values.username
-          loginParams.password = md5(values.password)
-          Login(loginParams)
-            .then((res) => this.loginSuccess(res))
-            .catch(err => this.requestFailed(err))
-            .finally(() => {
-              state.loginBtn = false
-            })
-        } else {
+          console.log(values)
+          const params = {
+            phone: values.mobile,
+            code: values.captcha,
+            password: values.password
+          }
+          recoverPassword(params).then((r) => {
+            this.$message.success('密码重置成功，即将返回登录界面')
+            setTimeout(() => this.$router.push({ name: 'login' }), 1500)
+          })
+              .catch(e => {
+                this.$message.error('出错了，请重试')
+                state.loginBtn = false
+                console.log('error:' + e)
+              })
+          } else {
           setTimeout(() => {
             state.loginBtn = false
           }, 600)
         }
-      })
+        }
+      )
     },
     getCaptcha (e) {
       e.preventDefault()
@@ -190,11 +190,11 @@ export default {
           }, 1000)
 
           const hide = this.$message.loading('验证码发送中..', 0)
-          getSmsCaptcha({ mobile: values.mobile }).then(res => {
+          sendSMS({ phone: values.mobile }).then(res => {
             setTimeout(hide, 2500)
             this.$notification['success']({
               message: '提示',
-              description: '验证码获取成功，您的验证码为：' + res.result.captcha,
+              description: '验证码获取成功，请注意查收！',
               duration: 8
             })
           }).catch(err => {

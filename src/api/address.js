@@ -29,3 +29,10 @@ export function deleteAddress (userId, addressId) {
     method: 'delete'
   })
 }
+
+export function getAddressById (userId, addressId) {
+  return request({
+    url: `/users/${userId}/addresses/${addressId}`,
+    method: 'get'
+  })
+}

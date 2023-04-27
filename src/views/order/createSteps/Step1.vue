@@ -76,15 +76,10 @@ import router from '@/router'
 
 export default {
   name: 'Step1',
-  props: {
-    id: {
-      type: String,
-      required: true
-    }
-  },
   data () {
     return {
       userId: storage.get('user_id'),
+      itemId: this.$parent.itemId,
       labelCol: { lg: { span: 5 }, sm: { span: 5 } },
       wrapperCol: { lg: { span: 19 }, sm: { span: 19 } },
       form: this.$form.createForm(this),
@@ -123,8 +118,9 @@ export default {
     }
   },
   mounted () {
-    if (this.id) {
-      getItemById(this.id).then(res => {
+    console.log('id:', this.$parent, this.$parent.itemId)
+    if (this.itemId) {
+      getItemById(this.itemId).then(res => {
         this.itemName = res.name
         this.fee = res.price
         this.deposit = res.deposit
@@ -132,9 +128,14 @@ export default {
     } else {
       router.go(-1)
     }
-    getUserAddresses(this.userId).then(res => {
-      this.addresses = res
-    })
+    if (this.userId) {
+      getUserAddresses(this.userId).then(res => {
+        this.addresses = res
+      })
+    } else {
+      // TODO: 没登录下单跳转到登录页面
+      router.push({ name: 'login' })
+    }
   }
 }
 </script>

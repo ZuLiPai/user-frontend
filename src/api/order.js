@@ -13,3 +13,11 @@ export function getOrderDetail (id) {
     method: 'get'
   })
 }
+
+export function createOrder (data) {
+  return request({
+    url: `/orders/`,
+    method: 'post',
+    data
+  })
+}

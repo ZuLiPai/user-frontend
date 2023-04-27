@@ -22,9 +22,9 @@
 
         <div class="footer">
           <div class="links">
-            <a href="_self">帮助</a>
-            <a href="_self">隐私</a>
-            <a href="_self">条款</a>
+            <a @click="router().push({name: 'help'})">帮助</a>
+            <a @click="router().push({name: 'PrivacyProtocol'})">隐私</a>
+            <a @click="router().push({name: 'RentProtocol'})">条款</a>
           </div>
           <div class="copyright">
             Copyright &copy; {{ year }} ZuLiPai
@@ -39,9 +39,15 @@
 import { deviceMixin } from '@/store/device-mixin'
 import SelectLang from '@/components/SelectLang'
 import defaultSettings from '@/config/defaultSettings'
+import router from '@/router'
 
 export default {
   name: 'UserLayout',
+  methods: {
+    router () {
+      return router
+    }
+  },
   components: {
     SelectLang
   },

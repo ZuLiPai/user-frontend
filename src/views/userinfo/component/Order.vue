@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="order in data" :key="order.id">
-      <a-card :title="genTitle(order)" style="width: 100%">
+      <a-card :title="genTitle(order)" style="width: 100%; margin-bottom: 20px">
         <a-tag slot="extra">{{ statusText(order.status) }}</a-tag>
         <a-row type="flex" align="middle">
           <a-col :flex="3">
@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import OrderCard from '@/views/userinfo/component/OrderCard.vue'
 import storage from 'store'
 import { getOrdersByUserId } from '@/api/order'
 import { statusText } from '@/utils/orderStatus'
@@ -33,7 +32,6 @@ import router from '@/router'
 
 export default {
   name: 'Order',
-  components: { OrderCard },
   data () {
     return {
       orderTime: '2023/02/12',

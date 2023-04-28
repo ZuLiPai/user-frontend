@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { UserLayout, BasicLayout, BlankLayout } from '@/layouts'
+import { UserLayout, BasicLayout } from '@/layouts'
 // import { bxAnaalyse } from '@/core/icons'
 
 const RouteView = {
@@ -70,7 +70,7 @@ export const asyncRouterMap = [
             meta: { title: '创建订单', keepAlive: true, permission: ['form'], props: true }
           },
           {
-            path: 'return',
+            path: 'return/:id',
             name: 'ReturnOrder',
             component: () => import('@/views/order/ReturnOrder.vue'),
             meta: {

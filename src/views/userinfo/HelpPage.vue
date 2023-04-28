@@ -9,7 +9,7 @@
         <a-list-item slot="renderItem" slot-scope="item">
           <a-list-item-meta
           >
-            <a slot="title" style="font-size: 24px; color: #448ef7">{{ item.title }}</a>
+            <a slot="title" style="font-size: 24px; color: #3e81e2">{{ item.title }}</a>
             <a slot="description" style="font-size: 18px; color: black; line-height: 40px" v-html="item.description">{{ item.description }}</a>
           </a-list-item-meta>
         </a-list-item>

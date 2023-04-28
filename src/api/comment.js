@@ -6,3 +6,11 @@ export function getComments (id) {
     method: 'get'
   })
 }
+
+export function createComment (id, data) {
+  return request({
+    url: `items/${id}/comments/`,
+    method: 'post',
+    data
+  })
+}

@@ -44,10 +44,12 @@
             </a-tab-pane>
             <a-tab-pane key="description" tab="租赁流程说明及须知">
               <!-- 说明内容 -->
-              请参阅<a @click="router().push({name: 'RentProtocol'})">《租立拍相机租赁平台客户租赁协议》</a>
+              <img src="../../assets/resources/租赁流程图2.png" style="width: 80%"/>
+              <br>
+              详情请参阅<a @click="router().push({name: 'RentProtocol'})">《租立拍相机租赁平台客户租赁协议》</a>
             </a-tab-pane>
             <a-tab-pane key="protocol" tab="租立拍用户协议">
-              请参阅<a @click="router().push({name: 'ServeProtocol'})">《租立拍相机租赁平台客户服务协议》</a>
+              详情请参阅<a @click="router().push({name: 'ServeProtocol'})">《租立拍相机租赁平台客户服务协议》</a>
             </a-tab-pane>
           </a-tabs>
         </a-col>

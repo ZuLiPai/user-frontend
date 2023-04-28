@@ -8,7 +8,7 @@
           type="text"
           :placeholder="$t('user.register.username.placeholder')"
           v-decorator="['username', {rules: [{ required: true, type: 'string', message: $t('user.username.required') }], validateTrigger: ['change', 'blur']}]"
-        ></a-input>
+        ><a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/></a-input>
       </a-form-item>
       <a-form-item>
         <a-input
@@ -16,7 +16,7 @@
           type="text"
           :placeholder="$t('user.register.email.placeholder')"
           v-decorator="['email', {rules: [{ required: true, type: 'email', message: $t('user.email.required') }], validateTrigger: ['change', 'blur']}]"
-        ></a-input>
+        ><a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/></a-input>
       </a-form-item>
       <a-popover
         placement="rightTop"
@@ -39,7 +39,7 @@
             @click="handlePasswordInputClick"
             :placeholder="$t('user.register.password.placeholder')"
             v-decorator="['password', {rules: [{ required: true, message: $t('user.password.required') }, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur']}]"
-          ></a-input-password>
+          ><a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/></a-input-password>
         </a-form-item>
       </a-popover>
 
@@ -48,12 +48,13 @@
           size="large"
           :placeholder="$t('user.register.confirm-password.placeholder')"
           v-decorator="['password2', {rules: [{ required: true, message: $t('user.password.required') }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
-        ></a-input-password>
+        ><a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/></a-input-password>
       </a-form-item>
       <Captcha ref="captchaComponent"></Captcha>
       <!-- TODO: 把图形验证码的判断放到获取短信验证码上：图形验证码不正确则无法获取短信，并在输入栏下提示-->
       <a-form-item>
         <a-input size="large" :placeholder="$t('user.login.mobile.placeholder')" v-decorator="['phone', {rules: [{ required: true, message: $t('user.phone-number.required'), pattern: /^1[3456789]\d{9}$/ }, { validator: this.handlePhoneCheck } ], validateTrigger: ['change', 'blur'] }]">
+          <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(0,0,0,.25)' }"/>
         </a-input>
       </a-form-item>
 

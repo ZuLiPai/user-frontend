@@ -17,11 +17,11 @@
 
       <template v-slot:extra>
         <a-button-group style="margin-right: 10px;">
-          <a-button>签收商品</a-button>
-          <a-button>归还商品</a-button>
-          <a-button @click="handleComment">评论</a-button>
+          <a-button v-if="Number(data.status) === 1" type="primary" @click="showConfirm(checkedOrderBtn)">签收商品</a-button>
+          <a-button v-if="Number(data.status) === 2" type="primary" @click="router.push({name: 'ReturnOrder', params: {id : orderId}})">归还商品</a-button>
+          <a-button v-if="Number(data.status) === 6" type="primary" @click="handleComment">评价商品</a-button>
         </a-button-group>
-        <a-button type="primary" @click="handleTicket">发起工单</a-button>
+        <a-button type="danger" @click="handleTicket">发起工单</a-button>
       </template>
 
       <template v-slot:extraContent>
@@ -40,14 +40,14 @@
       <template>
         <a-row style="max-width: 90%; margin: 0 auto">
           <a-col :span="24" style="margin-bottom: 20px">
-            <a-card>
+            <a-card title="订单进度">
               <a-steps progress-dot="true" :current="data.status">
-                <a-step title="已付款" subTitle="" description="等待租立拍发货"/>
-                <a-step title="已发货" description="快递单号为请耐心等待"/>
-                <a-step title="租赁中" description="截止日期为2023-3-1"/>
-                <a-step title="待归还" description="请在规定时间内归还;若已发货请填写快递单号"/>
-                <a-step title="验机中" description="租立拍正在检查机器状态"/>
-                <a-step title="订单完成" description="订单已完成，欢迎下次租赁"/>
+                <a-step title="已付款" subTitle="租立拍即将发货"/>
+                <a-step title="已发货" subTitle="快递已发出请耐心等待" :description="this.expressText1"/>
+                <a-step title="租赁中" subTitle="尽情享受设备吧" :description="'归还日期:' + data.expect_end_time"/>
+                <a-step title="归还中" subTitle="请按预期时间归还" :description="this.expressText2"/>
+                <a-step title="验机中" subTitle="租立拍正在验机" :description="'验机完成后将退还押金'"/>
+                <a-step title="订单完成" subTitle="订单已完成" description="欢迎下次租赁"/>
               </a-steps>
             </a-card>
           </a-col>
@@ -106,9 +106,10 @@
 <script>
 import { baseMixin } from '@/store/app-mixin'
 import storage from 'store'
-import { getOrderDetail } from '@/api/order'
 import { Rate } from 'ant-design-vue'
 import { createComment } from '@/api/comment'
+import { getOrderDetail, updateExpress, updateOrder } from '@/api/order'
+import router from '@/router'
 
 export default {
   name: 'OrderDetail',
@@ -120,11 +121,20 @@ export default {
     return {
       orderId: this.$route.params.id,
       userId: storage.get('user_id'),
-      data: {},
       visibleComment: false,
       commentStar: null,
-      commentText: ''
+      commentText: '',
+      data: {},
+      router,
+      expressText1: '',
+      expressText2: ''
     }
+  },
+  mounted () {
+    getOrderDetail(this.orderId).then(resp => {
+      this.data = resp
+      this.handleExpress(this.data.express_data)
+    })
   },
   methods: {
     onConfirm () {},
@@ -151,12 +161,74 @@ export default {
       } else {
         this.$message.warning('请填写评价内容')
       }
+    },
+    async checkedOrderBtn () {
+      // 获取当前时间
+      const currentDateTime = new Date()
+      const year = currentDateTime.getFullYear()
+      const month = ('0' + (currentDateTime.getMonth() + 1)).slice(-2)
+      const day = ('0' + currentDateTime.getDate()).slice(-2)
+      const hour = ('0' + currentDateTime.getHours()).slice(-2)
+      const minute = ('0' + currentDateTime.getMinutes()).slice(-2)
+      const second = ('0' + currentDateTime.getSeconds()).slice(-2)
+      const datetime = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
+      const data = {
+        id: this.orderId,
+        status: '2',
+        expect_end_time: this.data.expect_end_time,
+        expect_start_time: this.data.expect_start_time,
+        actual_start_time: datetime
+      }
+      // 更新订单
+      updateOrder(this.orderId, data).then(() => {
+        const updateExpressData = {
+          order_express_id: this.data.express_data[0].order_express_id,
+          express_order: this.data.express_data[0].express_order,
+          express_name_id: this.data.express_data[0].express_name_id,
+          express_number: this.data.express_data[0].express_number,
+          express_kind: this.data.express_data[0].express_kind,
+          express_status: true
+        }
+        // 更新快递
+        updateExpress(this.orderId, updateExpressData).then(() => {
+          this.$message.success('签收成功')
+          // 刷新页面
+          getOrderDetail(this.orderId).then(resp => {
+            this.data = resp
+          })
+        })
+      }).catch(() => {
+        this.$message.error('出错了，请重试！')
+      })
+    },
+    handleExpress (data) {
+      data.forEach((t) => {
+        if (t.express_kind === false) {
+          this.expressText1 = t.express_name + ':' + t.express_number
+        } else {
+          this.expressText2 = t.express_name + ':' + t.express_number
+        }
+      })
+    },
+    returnOrderBtn () {
+      // Router to return modal
+      this.$message.info('return')
+      this.expressVisible = true
+    },
+    showConfirm (callback) {
+      this.$confirm({
+        title: '签收商品',
+        content: '确认已收到商品，并且商品能够正常使用，订单将进入租赁状态',
+        onOk () {
+          return new Promise((resolve, reject) => {
+            callback().then(r => {
+              return new Promise(resolve)
+            })
+          }).catch(() => console.log('出错啦!'))
+        },
+        onCancel () {}
+      })
     }
-  },
-  mounted () {
-    getOrderDetail(this.orderId).then(resp => {
-      this.data = resp
-    })
   }
 }
 

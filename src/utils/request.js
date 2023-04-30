@@ -10,7 +10,7 @@ import router from '@/router'
 const request = axios.create({
   // API 请求的默认前缀
   // baseURL: process.env.VUE_APP_API_BASE_URL,
-  baseURL: 'http://localhost:8000/',
+  baseURL: process.env.NODE_ENV === 'development' ? 'http://localhost:8000/' : 'https://api.zulipai.shop/',
   timeout: 6000 // 请求超时时间
 })
 

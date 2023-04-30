@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-if="data.length === 0">
+      <a-empty/>
+    </div>
     <div v-for="order in data" :key="order.id">
       <a-card :title="genTitle(order)" style="width: 100%; margin-bottom: 20px">
         <a-tag slot="extra">{{ statusText(order.status) }}</a-tag>
@@ -29,9 +32,13 @@ import { getOrdersByUserId } from '@/api/order'
 import { statusText } from '@/utils/orderStatus'
 import moment from 'moment'
 import router from '@/router'
+import { Empty as AEmpty } from 'ant-design-vue'
 
 export default {
   name: 'Order',
+  components: {
+    AEmpty
+  },
   data () {
     return {
       orderTime: '2023/02/12',

@@ -9,22 +9,12 @@
           >
             <a-row type="flex">
               <a-col :flex="5">
-                <a-input placeholder="请输入您的用户名" value="Tim" disabled="true"/>
+                <a-input placeholder="请输入您的用户名" v-model="formText.username" :disabled="userNameField"/>
               </a-col>
               <a-col :flex="2"></a-col>
               <a-col :flex="3">
-                <a-button type="primary">修改</a-button>
-              </a-col>
-            </a-row>
-          </a-form-item>
-          <a-form-item label="密码">
-            <a-row type="flex">
-              <a-col :flex="5">
-                <a-input-password placeholder="请输入您的新密码" disabled="true"/>
-              </a-col>
-              <a-col :flex="2"></a-col>
-              <a-col :flex="3">
-                <a-button type="primary">修改</a-button>
+                <a-button type="primary" v-if="userNameField" @click="userNameField = !userNameField">修改</a-button>
+                <a-button type="primary" v-if="!userNameField" @click="changeInfo(1)">确定</a-button>
               </a-col>
             </a-row>
           </a-form-item>
@@ -33,11 +23,12 @@
           >
             <a-row type="flex">
               <a-col :flex="5">
-                <a-input placeholder="请输入您的手机号" value="13800138000" disabled="true"/>
+                <a-input placeholder="请输入您的手机号" v-model="formText.phone" :disabled="phoneField"/>
               </a-col>
               <a-col :flex="2"></a-col>
               <a-col :flex="3">
-                <a-button type="primary">修改</a-button>
+                <a-button type="primary" v-if="phoneField" @click="phoneField = !phoneField">修改</a-button>
+                <a-button type="primary" v-if="!phoneField" @click="changeInfo(3)">确定</a-button>
               </a-col>
             </a-row>
           </a-form-item>
@@ -46,16 +37,16 @@
           >
             <a-row type="flex">
               <a-col :flex="5">
-                <a-input placeholder="请输入您的邮箱" value="Tim@apple.com" disabled="true"/>
+                <a-input placeholder="请输入您的邮箱" v-model="formText.email" :disabled="emailField"/>
               </a-col>
               <a-col :flex="2"></a-col>
               <a-col :flex="3">
-                <a-button type="primary">修改</a-button>
+                <a-button type="primary" v-if="emailField" @click="emailField = !emailField">修改</a-button>
+                <a-button type="primary" v-if="!emailField" @click="changeInfo(4)">确定</a-button>
               </a-col>
             </a-row>
           </a-form-item>
         </a-form>
-
       </a-col>
       <a-col :order="1" :md="24" :lg="8" :style="{ minHeight: '180px' }">
         <div class="ant-upload-preview" @click="$refs.modal.edit(1)" >
@@ -77,6 +68,8 @@
 <script>
 import AvatarModal from './AvatarModal'
 import { baseMixin } from '@/store/app-mixin'
+import { getUserInfo, updateUserInfo } from '@/api/userinfo'
+import storage from 'store'
 
 export default {
   name: 'PersonlInfo',
@@ -102,12 +95,52 @@ export default {
         // 开启宽度和高度比例
         fixed: true,
         fixedNumber: [1, 1]
-      }
+      },
+      userId: storage.get('user_id'),
+      userInfo: [],
+      formText: [],
+      passwordText: undefined,
+      userNameField: true,
+      passwordField: true,
+      emailField: true,
+      phoneField: true
     }
+  },
+  mounted () {
+    this.refreshPage()
   },
   methods: {
     setavatar (url) {
       this.option.img = url
+    },
+    refreshPage () {
+      getUserInfo(this.userId).then(r => {
+        this.userInfo = r
+        this.formText = r
+      })
+    },
+    changeInfo (field) {
+      updateUserInfo(this.userId, this.formText).then(r => {
+        console.log(r)
+        this.$message.success('修改成功')
+        switch (field) {
+          case 1:
+            this.userNameField = !this.userNameField
+            break
+          case 2:
+            this.passwordField = !this.passwordField
+            break
+          case 3:
+            this.phoneField = !this.phoneField
+            break
+          case 4:
+            this.emailField = !this.emailField
+            break
+          default:
+            break
+        }
+        this.refreshPage()
+      })
     }
   }
 }

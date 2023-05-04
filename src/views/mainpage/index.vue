@@ -11,7 +11,7 @@
         </a-col>
       </a-row>
     </a-card>
-    <a-card>
+    <a-card title="热卖商品">
       <a-row :gutter="16">
         <a-col
           :xs="24"

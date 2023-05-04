@@ -19,7 +19,7 @@
         <a-button-group style="margin-right: 10px;">
           <a-button v-if="Number(data.status) === 1" type="primary" @click="showConfirm(checkedOrderBtn)">签收商品</a-button>
           <a-button v-if="Number(data.status) === 2" type="primary" @click="router.push({name: 'ReturnOrder', params: {id : orderId}})">归还商品</a-button>
-          <a-button v-if="Number(data.status) === 6" type="primary" @click="handleComment">评价商品</a-button>
+          <a-button v-if="Number(data.status) === 6 && data.is_commented === false" type="primary" @click="handleComment">评价商品</a-button>
         </a-button-group>
         <a-button type="danger" @click="handleTicket">发起工单</a-button>
       </template>
@@ -147,16 +147,28 @@ export default {
     },
     handleSubmitComment () {
       if (this.commentStar && this.commentText) {
-        const data = {
+        const data0 = {
           order: this.orderId,
           user: this.userId,
           item: this.data.item,
           rating: this.commentStar,
           content: this.commentText
         }
-        createComment(this.data.item, data).then(resp => {
-          this.$message.success('评价成功')
-          this.visibleComment = false
+        createComment(this.data.item, data0).then(resp => {
+          const data1 = {
+            id: this.orderId,
+            status: this.data.status,
+            expect_end_time: this.data.expect_end_time,
+            expect_start_time: this.data.expect_start_time,
+            is_commented: true
+          }
+          updateOrder(this.orderId, data1).then(resp => {
+            this.$message.success('评价成功')
+            this.visibleComment = false
+            getOrderDetail(this.orderId).then(resp => {
+              this.data = resp
+            })
+          })
         })
       } else {
         this.$message.warning('请填写评价内容')

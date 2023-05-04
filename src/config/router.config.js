@@ -62,6 +62,7 @@ export const asyncRouterMap = [
         redirect: '/order/create',
         component: RouteView,
         meta: { title: '订单' },
+        hidden: true,
         children: [
           {
             path: '/order/create',
@@ -212,6 +213,7 @@ export const asyncRouterMap = [
         component: RouteView,
         redirect: '/comment/add',
         meta: { title: '评论' },
+        hidden: true,
         children: [
           {
             name: 'addComment',

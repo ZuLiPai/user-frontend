@@ -15,6 +15,13 @@ export function getItemById (id) {
   })
 }
 
+export function getItemImages (id) {
+  return request({
+    url: `/items/${id}/images/`,
+    method: 'get'
+  })
+}
+
 export function getTags () {
   return request({
     url: '/tags/',

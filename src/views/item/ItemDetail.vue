@@ -58,10 +58,10 @@
       <a-row>
         <a-col :span="4"/>
         <a-col :span="16">
-          <h2 style="margin-bottom: 10px">用户评价</h2>
+          <h2 style="margin-bottom: 10px; text-align: center">用户评价</h2>
           <div v-if="comments.length !== 0">
             <div v-for="comment in comments" :key="comment.id">
-              <a-card :title="comment.comment_username[0] + '***' + comment.comment_username.slice(-1)" style="width: 80%;">
+              <a-card :title="comment.comment_username[0] + '***' + comment.comment_username.slice(-1)" style="width: 100%;">
                 <template #extra>
                   <!--                <a href="#">佳能 Canon 5D Mark IV</a>-->
                   <rate :value="comment.rating" allow-half disabled/>
@@ -85,7 +85,9 @@
             <a-tab-pane key="introduction" tab="商品介绍与样片">
               <!-- 介绍内容 -->
               <!-- 样片图片 -->
-              <img src="../../assets/resources/SonyA7m3.jpeg" alt="sample image" style="width: 100%">
+              <div v-for="img in images" :key="img.image">
+                <img :src="img.image_url" alt="item image" style="width: 100%; margin-top: 5px">
+              </div>
             </a-tab-pane>
             <a-tab-pane key="specifications" tab="产品规格">
               <!-- 规格表格 -->
@@ -102,7 +104,7 @@
 
 <script>
 
-import { addFavoriteItem, deleteFavoriteItem, getFavoriteItems, getItemById } from '@/api/item'
+import { addFavoriteItem, deleteFavoriteItem, getFavoriteItems, getItemById, getItemImages } from '@/api/item'
 import storage from 'store'
 import { getComments } from '@/api/comment'
 import { Rate, Empty } from 'ant-design-vue'
@@ -127,6 +129,7 @@ export default {
         { title: '参数', dataIndex: 'value', key: 'value', align: 'center' }
       ],
       data: [],
+      images: null,
       comments: []
     }
   },
@@ -148,6 +151,9 @@ export default {
     })
     getComments(this.itemId).then(resp => {
       this.comments = resp.slice(0, 5)
+    })
+    getItemImages(this.itemId).then(resp => {
+      this.images = resp
     })
   },
   methods: {

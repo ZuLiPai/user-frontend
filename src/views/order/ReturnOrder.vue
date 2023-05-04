@@ -3,7 +3,7 @@
     <a-row style="max-width: 80%; margin: 0 auto">
       <a-col :span="24">
         <a-card title="归还商品">
-          <p><strong>待归还商品：佳能 Canon EOS 5D Mark IV</strong></p>
+          <p><strong>待归还商品：{{ data.item_name }}</strong></p>
           <a-divider></a-divider>
           <p><strong>收件人：库克</strong></p>
           <p><strong>电话：13800138000</strong></p>

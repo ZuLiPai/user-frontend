@@ -52,12 +52,12 @@ export default {
     getInfo().then(resp => {
       this.currentUser = {
         name: resp.username,
-        avatarUrl: resp.avatar_url
+        avatarUrl: './avatar.png'
       }
     }).catch(() => {
       this.currentUser = {
         name: 'Guest',
-        avatarUrl: 'https://zulipai.oss-cn-beijing.aliyuncs.com/74591665-83ea-46ff-abe0-f7195d8900beicon.png'
+        avatarUrl: './avatar.png'
       }
     })
   }

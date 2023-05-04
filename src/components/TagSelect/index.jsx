@@ -105,7 +105,7 @@ export default {
     const tagItems = filterEmpty(this.$slots.default)
     return (
       <div class={classString}>
-        {this.renderCheckAll()}
+        {/* {this.renderCheckAll()} */}
         {this.renderTags(tagItems)}
       </div>
     )

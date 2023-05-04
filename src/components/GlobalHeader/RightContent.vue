@@ -57,7 +57,7 @@ export default {
     }).catch(() => {
       this.currentUser = {
         name: 'Guest',
-        avatarUrl: ''
+        avatarUrl: 'https://zulipai.oss-cn-beijing.aliyuncs.com/74591665-83ea-46ff-abe0-f7195d8900beicon.png'
       }
     })
   }

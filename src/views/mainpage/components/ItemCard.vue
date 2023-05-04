@@ -2,7 +2,7 @@
   <div class="item-card">
     <a-card hoverable style="max-width: 280px; margin: 0 auto;" @click="handleItemDetail(item.id)">
       <template #cover>
-        <img alt="image" :src="image" width="100" />
+        <img alt="image" :src="image" width="100" style="background-size: 100% 100%" />
       </template>
       <a-card-meta :title="item.name">
         <template #description>
@@ -34,7 +34,7 @@ export default {
     if (this.item.first_image_url) {
       this.image = this.item.first_image_url
     } else {
-      this.image = 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
+      this.image = 'https://zulipai.oss-cn-beijing.aliyuncs.com/74591665-83ea-46ff-abe0-f7195d8900beicon.png'
     }
   },
   methods: {
@@ -50,7 +50,8 @@ export default {
 p {
   margin-top: 15px;
 }
-.ant-card .item-card {
+.item-card {
+  height: 400px;
   margin-bottom: 20px;
 }
 .price-container {

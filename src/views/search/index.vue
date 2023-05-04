@@ -7,20 +7,14 @@
       <a-form :form="form" layout="inline">
         <standard-form-row title="标签：" block style="padding-bottom: 11px;">
           <a-form-item>
-            <tag-select>
-              <tag-select-option value="视频">视频</tag-select-option>
-              <tag-select-option value="均衡">均衡</tag-select-option>
-              <tag-select-option value="人像">人像</tag-select-option>
-              <tag-select-option value="旅游">旅游</tag-select-option>
-              <tag-select-option value="风光">风光</tag-select-option>
-              <tag-select-option value="水下">水下</tag-select-option>
-              <tag-select-option value="人文">人文</tag-select-option>
-              <tag-select-option value="星空">星空</tag-select-option>
-              <tag-select-option value="建筑">建筑</tag-select-option>
-              <tag-select-option value="演唱会">演唱会</tag-select-option>
-              <tag-select-option value="野生动物">野生动物</tag-select-option>
-              <tag-select-option value="航拍">航拍</tag-select-option>
-            </tag-select>
+            <template v-for="t in tags">
+              <a-checkable-tag
+                :key="t.id"
+                :checked="selectedTags.indexOf(t.name) > -1"
+                @change="checked => handleChange(t.name, checked)">
+                {{ t.name }}
+              </a-checkable-tag>
+            </template>
           </a-form-item>
         </standard-form-row>
 
@@ -33,7 +27,6 @@
                   mode="multiple"
                   placeholder="不限"
                   v-decorator="['type']"
-                  @change="handleChange"
                 >
                   <a-select-option value="cam">相机</a-select-option>
                   <a-select-option value="len">镜头</a-select-option>
@@ -73,7 +66,7 @@
 <script>
 // TODO: 现在只能用名字搜索，别的条件不行，要么删了
 import moment from 'moment'
-import { TagSelect, StandardFormRow, Ellipsis, AvatarList } from '@/components'
+import { AvatarList, Ellipsis, StandardFormRow, TagSelect } from '@/components'
 import ItemCard from '@/views/mainpage/components/ItemCard'
 import { getItems, getTags } from '@/api/item'
 
@@ -97,7 +90,8 @@ export default {
       tags: [],
       form: this.$form.createForm(this),
       loading: true,
-      searchText: ''
+      searchText: '',
+      selectedTags: []
     }
   },
   filters: {
@@ -112,10 +106,18 @@ export default {
     } else {
       this.refreshItems()
     }
+    getTags().then(resp => {
+      this.tags = resp
+    })
   },
   methods: {
-    handleChange (value) {
-      console.log(`selected ${value}`)
+    handleChange (tag, checked) {
+      // const { selectedTags } = this
+      // const nextSelectedTags = checked
+      //   ? [...selectedTags, tag]
+      //   : selectedTags.filter(t => t !== tag)
+      // console.log('You are interested in: ', nextSelectedTags)
+      this.selectedTags = checked ? [tag] : []
     },
     refreshItems (params) {
       getItems(params).then(resp => {
@@ -127,11 +129,15 @@ export default {
       })
     },
     onSearch () {
-      // this.$router.push({ name: 'search', query: { name: this.searchText } })
       this.loading = true
-      const params = {
-        name: this.searchText
+      const params = {}
+      if (this.searchText) {
+        params.name = this.searchText
       }
+      if (this.selectedTags.length > 0) {
+        params.tag = this.selectedTags[0]
+      }
+      console.log(params)
       getItems(params).then(resp => {
         this.data = resp
         this.loading = false

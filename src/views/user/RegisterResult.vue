@@ -1,6 +1,7 @@
 <template>
   <a-result
     :isSuccess="true"
+    status="success"
     :content="false"
     :title="username"
     :sub-title="description">

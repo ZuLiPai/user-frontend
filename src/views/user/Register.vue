@@ -71,6 +71,7 @@
             <a-button
               class="getVerificationCode"
               size="large"
+              :loading="phoneCodeLoading"
               @click="handleSubmit">
               获取验证码
             </a-button>
@@ -94,6 +95,7 @@ import { deviceMixin } from '@/store/device-mixin'
 import { scorePassword } from '@/utils/util'
 import Captcha from '@/views/Captcha.vue'
 import { disableUser, enableUser, registerUser, sendSMS, verifySMS } from '@/api/register'
+import { ref } from 'vue'
 
 const levelNames = {
   0: 'user.password.strength.short',
@@ -113,6 +115,7 @@ const levelColor = {
   2: '#ff7e05',
   3: '#52c41a'
 }
+const phoneCodeLoading = ref(false)
 export default {
   name: 'Register',
   components: {
@@ -239,6 +242,7 @@ export default {
               }
               sendSMS(SMSdata).then(() => {
                 this.$message.success('验证码发送成功，请注意查收')
+                phoneCodeLoading.value = true
               })
             })
           }).catch((r) => {

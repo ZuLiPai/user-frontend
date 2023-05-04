@@ -21,11 +21,13 @@ const errorHandler = (error) => {
     // 从 localstorage 获取 token
     const token = storage.get(ACCESS_TOKEN)
     if (error.response.status === 403) {
-      notification.error({
-        message: 'Forbidden',
-        description: data.message
+      store.dispatch('Logout').then(() => {
+        notification.error({
+          message: 'Forbidden',
+          description: data.message
+        })
+        router.push({ name: 'login' })
       })
-      router.push({ name: 'login' })
     }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
       notification.error({

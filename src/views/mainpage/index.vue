@@ -57,7 +57,7 @@ export default {
     }
   },
   mounted () {
-    getItems().then(resp => {
+    getItems({ show_status: 'True' }).then(resp => {
       resp.forEach(item => {
         if (item.promo_status) {
           this.promo_items.push(item)

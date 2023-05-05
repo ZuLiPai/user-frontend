@@ -143,10 +143,10 @@ export default {
       this.$refs.chart.loadChart(resp.price)
     })
     getFavoriteItems(this.userId).then(resp => {
-      // TODO:收藏状态显示有问题
-      if (resp.find(item => item.item.toString() === this.itemId)) {
+      const t = resp.find(item => item.item.toString() === this.itemId.toString())
+      if (t) {
         this.favoriteStatus = '已收藏'
-        this.favoriteId = resp.find(item => item.item.toString() === this.itemId).id
+        this.favoriteId = t.id
       }
     })
     getComments(this.itemId).then(resp => {
@@ -161,6 +161,10 @@ export default {
       return router
     },
     toggleFavorite () {
+      if (!this.userId) {
+        this.$message.warning('收藏请先登录')
+        return
+      }
       if (this.favoriteStatus === '已收藏') {
         const data = {
           user: this.userId,

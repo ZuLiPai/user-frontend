@@ -18,36 +18,36 @@
           </a-form-item>
         </standard-form-row>
 
-        <standard-form-row title="" grid last>
-          <a-row>
-            <a-col :lg="8" :md="10" :sm="10" :xs="24">
-              <a-form-item label="类型">
-                <a-select
-                  style="min-width: 200px; width: 100%;"
-                  mode="multiple"
-                  placeholder="不限"
-                  v-decorator="['type']"
-                >
-                  <a-select-option value="cam">相机</a-select-option>
-                  <a-select-option value="len">镜头</a-select-option>
-                  <a-select-option value="drone">无人机</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :lg="8" :md="10" :sm="10" :xs="24">
-              <a-form-item label="好评度">
-                <a-select
-                  style="min-width: 200px; width: 100%;"
-                  placeholder="不限"
-                  v-decorator="['rate']"
-                >
-                  <a-select-option value="good">优秀</a-select-option>
-                  <a-select-option value="normal">普通</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </standard-form-row>
+        <!--        <standard-form-row title="" grid last>-->
+        <!--          <a-row>-->
+        <!--            <a-col :lg="8" :md="10" :sm="10" :xs="24">-->
+        <!--              <a-form-item label="类型">-->
+        <!--                <a-select-->
+        <!--                  style="min-width: 200px; width: 100%;"-->
+        <!--                  mode="multiple"-->
+        <!--                  placeholder="不限"-->
+        <!--                  v-decorator="['type']"-->
+        <!--                >-->
+        <!--                  <a-select-option value="cam">相机</a-select-option>-->
+        <!--                  <a-select-option value="len">镜头</a-select-option>-->
+        <!--                  <a-select-option value="drone">无人机</a-select-option>-->
+        <!--                </a-select>-->
+        <!--              </a-form-item>-->
+        <!--            </a-col>-->
+        <!--            <a-col :lg="8" :md="10" :sm="10" :xs="24">-->
+        <!--              <a-form-item label="好评度">-->
+        <!--                <a-select-->
+        <!--                  style="min-width: 200px; width: 100%;"-->
+        <!--                  placeholder="不限"-->
+        <!--                  v-decorator="['rate']"-->
+        <!--                >-->
+        <!--                  <a-select-option value="good">优秀</a-select-option>-->
+        <!--                  <a-select-option value="normal">普通</a-select-option>-->
+        <!--                </a-select>-->
+        <!--              </a-form-item>-->
+        <!--            </a-col>-->
+        <!--          </a-row>-->
+        <!--        </standard-form-row>-->
       </a-form>
     </a-card>
 
@@ -64,7 +64,6 @@
 </template>
 
 <script>
-// TODO: 现在只能用名字搜索，别的条件不行，要么删了
 import moment from 'moment'
 import { AvatarList, Ellipsis, StandardFormRow, TagSelect } from '@/components'
 import ItemCard from '@/views/mainpage/components/ItemCard'
@@ -130,6 +129,7 @@ export default {
     },
     onSearch () {
       this.loading = true
+      this.data = []
       const params = {}
       if (this.searchText) {
         params.name = this.searchText

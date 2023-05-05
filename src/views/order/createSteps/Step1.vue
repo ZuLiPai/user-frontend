@@ -133,7 +133,6 @@ export default {
         this.addresses = res
       })
     } else {
-      // TODO: 没登录下单跳转到登录页面
       router.push({ name: 'login' })
     }
   }

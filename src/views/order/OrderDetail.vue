@@ -142,7 +142,6 @@ export default {
       this.$router.push({ name: 'CreateTicket' })
     },
     handleComment () {
-      // TODO: 只在订单完成之后评论
       this.visibleComment = true
     },
     handleSubmitComment () {

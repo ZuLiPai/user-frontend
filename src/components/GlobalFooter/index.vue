@@ -7,7 +7,7 @@
           href="https://www.github.com/vueComponent/ant-design-vue-pro"
           target="_blank">ant-design-vue-pro</a>.
       Thank <a href="https://www.github.com/sendya/" target="_blank">@Sendya</a>.
-      Version 20230504.
+      Version 20230505-0920.
     </template>
     <template v-slot:copyright>
       <!--      <a href="https://github.com/vueComponent" target="_blank">vueComponent</a>-->

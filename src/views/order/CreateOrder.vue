@@ -126,7 +126,6 @@ import router from '@/router'
 import moment from 'moment/moment'
 import { getItemById } from '@/api/item'
 import { getUserAddresses } from '@/api/address'
-// TODO: 现在获取的是所有人的地址，这怎么能行，前后端都得改（主要改后端）
 export default {
   name: 'CreateOrder',
   components: {
@@ -213,7 +212,6 @@ export default {
         this.addresses = res
       })
     } else {
-      // TODO: 没登录下单跳转到登录页面
       router.push({ name: 'login' })
     }
   }

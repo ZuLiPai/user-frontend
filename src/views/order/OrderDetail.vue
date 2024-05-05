@@ -19,6 +19,7 @@
         <a-button-group style="margin-right: 10px;">
           <a-button v-if="Number(data.status) === 1" type="primary" @click="showConfirm(checkedOrderBtn)">签收商品</a-button>
           <a-button v-if="Number(data.status) === 2" type="primary" @click="router.push({name: 'ReturnOrder', params: {id : orderId}})">归还商品</a-button>
+          <a-button v-if="Number(data.status) === 2" type="primary" @click="buyProduct()">买断商品</a-button>
           <a-button v-if="Number(data.status) === 6 && data.is_commented === false" type="primary" @click="handleComment">评价商品</a-button>
         </a-button-group>
         <a-button type="danger" @click="handleTicket">发起工单</a-button>
@@ -48,6 +49,7 @@
                 <a-step title="归还中" subTitle="请按预期时间归还" :description="this.expressText2"/>
                 <a-step title="验机中" subTitle="租立拍正在验机" :description="'验机完成后将退还押金'"/>
                 <a-step title="订单完成" subTitle="订单已完成" description="欢迎下次租赁"/>
+                <a-step title="已买断" subTitle="用户买断商品" description="欢迎下次租赁"/>
               </a-steps>
             </a-card>
           </a-col>
@@ -110,6 +112,7 @@ import { Rate } from 'ant-design-vue'
 import { createComment } from '@/api/comment'
 import { getOrderDetail, updateExpress, updateOrder } from '@/api/order'
 import router from '@/router'
+import { createTicket } from '@/api/ticket'
 
 export default {
   name: 'OrderDetail',
@@ -236,6 +239,29 @@ export default {
               return new Promise(resolve)
             })
           }).catch(() => console.log('出错啦!'))
+        },
+        onCancel () {}
+      })
+    },
+    buyProduct () {
+      const that = this
+      this.$confirm({
+        title: '买断商品',
+        content: '确定要买断商品？这会向客服开启一个工单，用于协商买断商品的价格事宜。',
+        onOk () {
+          const data = {
+            ticket_user: that.userId,
+            ticket_title: '买断商品 订单编号：' + that.orderId,
+            ticket_message: '用户申请买断商品',
+            isCustomer: true
+          }
+          createTicket(data).then(res => {
+            that.$message.success('工单创建成功，3秒后跳转到工单列表')
+            setTimeout(() => {
+              that.loading = false
+              router.push({ name: 'Ticket' })
+            }, 3000)
+          })
         },
         onCancel () {}
       })
